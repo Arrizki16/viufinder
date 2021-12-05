@@ -828,7 +828,7 @@ legend {
   justify-content: center;
   -ms-flex-align: center;
   align-items: center;
-  background-image: url("/assets/images/bg.jpg");
+  background-image: url("/assets/img/bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   padding: 15px;
@@ -1166,7 +1166,7 @@ legend {
   justify-content: center;
   -ms-flex-align: center;
   align-items: center;
-  background-image: url("/assets/images/edit.jpg");
+  background-image: url("/assets/img/edit.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   padding: 15px;
@@ -1503,7 +1503,7 @@ legend {
   justify-content: center;
   -ms-flex-align: center;
   align-items: center;
-  background-image: url("/assets/images/alat.jpg");
+  background-image: url("/assets/img/alat.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   padding: 15px;
