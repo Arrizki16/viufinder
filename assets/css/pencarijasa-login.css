@@ -1,12 +1,13 @@
 html,body {
 	height: 100%;
-	background-image: url("/assets/img/bg-login.jpg");
-	background-repeat: no-repeat;
-	background-size: cover;
 }
 
 body.my-login-page {
-	background-color: #f7f9fb;
+	/* background-color: #f7f9fb; */
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+	background-image: url("/assets/img/bg-login.jpg");
 	font-size: 14px;
 }
 
@@ -14,7 +15,7 @@ body.my-login-page {
 	width: 214.5px;
 	height: 48px;
 	overflow: hidden;
-	margin: 50px auto;
+	margin: 60px auto;
 	/* box-shadow: 0 1px 8px 5px rgba(0,0,0,.05); */
 	position: relative;
 	z-index: 1;
