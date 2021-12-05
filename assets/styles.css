@@ -1,0 +1,228 @@
+body {
+  height: 100%;
+  width: 100%;
+  padding: 100px 100px;
+}
+.box {
+  min-width: 1300px;
+  min-height: 100%;
+  padding: 20px;
+  display: flex;
+}
+
+.box1 {
+  width: 400px;
+  height: 100px;
+  padding: 20px;
+}
+
+.box2 {
+  width: 400px;
+  height: 100px;
+  padding: 20px;
+}
+.box3 {
+  width: 400px;
+  height: 100px;
+  padding: 20px;
+}
+
+.button {
+  display: block;
+  position: relative;
+  padding: 20px;
+}
+
+.button1 {
+  border: none;
+  display: inline-block;
+  width: 120px;
+  height: 60px;
+  border-radius: 10px;
+  text-align: center;
+  color: rgb(148, 145, 141);
+}
+.button1:hover {
+  background-color: white;
+}
+.button2 {
+  border: none;
+  display: inline-block;
+  width: 200px;
+  height: 60px;
+  border-radius: 10px;
+  text-align: center;
+  color: rgb(148, 145, 141);
+}
+.button2:hover {
+  background-color: white;
+}
+
+.dropbtn {
+  color: rgb(148, 145, 141);
+  width: 350px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  padding-top: 25px;
+  padding-left: 25px;
+  color: white;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 12px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: white;
+}
+
+.dropdown1 {
+  position: relative;
+  display: inline-block;
+  padding-top: 25px;
+  padding-left: 25px;
+  color: white;
+}
+
+.dropbtn1 {
+  color: rgb(148, 145, 141);
+  width: 350px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content1 {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content1 a {
+  color: black;
+  padding: 12px 12px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content1 a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown1:hover .dropdown-content1 {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown1:hover .dropbtn1 {
+  background-color: white;
+}
+
+.dropdown2 {
+  position: relative;
+  display: inline-block;
+  padding-top: 25px;
+  padding-left: 25px;
+  color: white;
+}
+
+.dropbtn2 {
+  color: rgb(148, 145, 141);
+  width: 350px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content2 {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content2 a {
+  color: black;
+  padding: 12px 12px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content2 a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown2:hover .dropdown-content2 {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown2:hover .dropbtn2 {
+  background-color: white;
+}
+
+.btnfinish {
+  min-width: 1300px;
+  min-height: 100%;
+  padding-top: 50px;
+  padding-left: 20px;
+  display: block;
+}
+.search {
+  color: rgb(148, 145, 141);
+  width: 100px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+}
+
+.search:hover {
+  background-color: darkgray;
+  color: white;
+}
