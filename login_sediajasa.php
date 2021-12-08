@@ -1,10 +1,44 @@
+<?php
+session_start();
+
+// if (isset($_SESSION['email'])) {
+//   header('Location: table.php');
+// }
+
+include_once("database/db_connection.php");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+	$stmt = $conn->prepare('SELECT * FROM penyedia_jasa WHERE pjasa_email= ?');
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            if ($row["pjasa_password"] == $password) {
+              $_SESSION['email'] = $row['pjasa_email'];
+              header('Location: index.php');
+            } else {
+                echo "<script>alert('Email atau password Anda salah. Silahkan coba lagi!')</script>";
+            }
+        }
+    } else {
+        echo "<script>alert('Email anda tidak dapat ditemukan. Silahkan coba lagi!')</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="author" content="Kodinger">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>Pencari Jasa Login Page</title>
+	<title>Penyedia Jasa Login Page</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 	<!-- Favicons -->
@@ -25,19 +59,19 @@
 	<header id="header" class="fixed-top d-flex align-items-center ">
 		<div class="container d-flex align-items-center justify-content-between">
 	
-		  <h1 class="logo"><a href="index.html">Viufinder</a></h1>
+		  <h1 class="logo"><a href="index.php">Viufinder</a></h1>
 		  <!-- Uncomment below if you prefer to use an image logo -->
-		  <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+		  <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 	
 		  <nav id="navbar" class="navbar">
 			<ul>
-			  <li><a class="nav-link scrollto" href="index.html">Home</a></li>
+			  <li><a class="nav-link scrollto" href="index.php">Home</a></li>
 			  <li>
 				<div class="dropdown">
-				  <a class="getstarted scrollto active dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="Login_carijasa.html">Login</a>
+				  <a class="getstarted scrollto active dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="login_sediajasa.php">Login</a>
 				  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-					<a class="dropdown-item" href="Login_carijasa.html">Pencari Jasa</a>
-				    <a class="dropdown-item" href="Login_sediajasa.html">Penyedia Jasa</a>
+					<a class="dropdown-item" href="login_carijasa.php">Pencari Jasa</a>
+				    <a class="dropdown-item" href="login_sediajasa.php">Penyedia Jasa</a>
 				  </ul>
 			  </li>
 			</ul>
@@ -52,12 +86,12 @@
 			<div class="row justify-content-md-center h-100">
 				<div class="card-wrapper">
 					<div class="brand">
-						<a href="index.html"><img src="assets/img/logo-viufinder.png" alt="logo"></a>
+						<a href="index.php"><img src="assets/img/logo-viufinder.png" alt="logo"></a>
 					</div>
 					<div class="card fat">
 						<div class="card-body">
-							<h4 class="card-title text-center">LOGIN PENCARI JASA</h4>
-							<form method="POST" class="my-login-validation" novalidate="">
+							<h4 class="card-title text-center">LOGIN PENYEDIA JASA</h4>
+							<form action="" method="POST" class="my-login-validation" novalidate="">
 								<div class="form-group">
 									<label for="email">E-mail</label>
 									<input id="email" type="email" class="form-control" placeholder="type email" name="email" value="" required autofocus>
@@ -78,7 +112,7 @@
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="remember" id="remember" class="custom-control-input">
 										<label for="remember" class="custom-control-label">Remember Me
-											<a href="forgot.html" class="float-right">
+											<a href="forgot.php" class="float-right">
 												Forgot Password?
 											</a>
 										</label>
@@ -91,7 +125,7 @@
 									</button>
 								</div>
 								<div class="mt-4 text-center">
-									Don't have an account? <a href="register_carijasa.html">Create One</a>
+									Don't have an account? <a href="register_sediajasa.php">Create One</a>
 								</div>
 							</form>
 						</div>

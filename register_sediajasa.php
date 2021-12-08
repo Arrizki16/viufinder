@@ -1,3 +1,29 @@
+<?php
+session_start();
+
+// if (isset($_SESSION['email'])) {
+//   header('Location: table.php');
+// }
+
+include_once("database/db_connection.php");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+	$name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+	$stmt = $conn->prepare('INSERT INTO penyedia_jasa (pjasa_nama, pjasa_email, pjasa_password) VALUES (?, ?, ?)');
+    $stmt->bind_param('sss', $name, $email, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+	if($result) {
+		header('Location: login_sediajasa.php');
+	}
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,19 +50,19 @@
 	<header id="header" class="fixed-top d-flex align-items-center ">
 		<div class="container d-flex align-items-center justify-content-between">
 	
-		  <h1 class="logo"><a href="index.html">Viufinder</a></h1>
+		  <h1 class="logo"><a href="index.php">Viufinder</a></h1>
 		  <!-- Uncomment below if you prefer to use an image logo -->
 		  <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 	
 		  <nav id="navbar" class="navbar">
 			<ul>
-			  <li><a class="nav-link scrollto" href="index.html">Home</a></li>
+			  <li><a class="nav-link scrollto" href="index.php">Home</a></li>
 			  <li>
 				<div class="dropdown">
-				  <a class="getstarted scrollto active dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="Login_carijasa.html">Login</a>
+				  <a class="getstarted scrollto active dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="login_sediajasa.php">Login</a>
 				  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-					<a class="dropdown-item" href="Login_carijasa.html">Pencari Jasa</a>
-				    <a class="dropdown-item" href="Login_sediajasa.html">Penyedia Jasa</a>
+					<a class="dropdown-item" href="login_carijasa.php">Pencari Jasa</a>
+				    <a class="dropdown-item" href="login_sediajasa.php">Penyedia Jasa</a>
 				  </ul>
 			  </li>
 			</ul>
@@ -51,11 +77,11 @@
 			<div class="row justify-content-md-center h-100">
 				<div class="card-wrapper">
 					<div class="brand">
-						<a href="index.html"><img src="assets/img/logo-viufinder.png" alt="bootstrap 4 login page"></a>
+						<a href="index.php"><img src="assets/img/logo-viufinder.png" alt="bootstrap 4 login page"></a>
 					</div>
 					<div class="card fat">
 						<div class="card-body">
-							<h4 class="card-title text-center">REGISTER PENCARI JASA</h4>
+							<h4 class="card-title text-center">REGISTER PENYEDIA JASA</h4>
 							<form method="POST" class="my-login-validation" novalidate="">
 								<div class="form-group">
 									<label for="name">Name</label>
@@ -97,7 +123,7 @@
 									</button>
 								</div>
 								<div class="mt-4 text-center">
-									Already have an account? <a href="Login_carijasa.html">Login</a>
+									Already have an account? <a href="login_sediajasa.php">Login</a>
 								</div>
 							</form>
 						</div>
