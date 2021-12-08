@@ -110,7 +110,7 @@ CREATE TABLE `portofolio` (
 
 CREATE TABLE `editor` (
     `edtr_id` int(11) NOT NULL AUTO_INCREMENT,
-    `edtr+rating` int,
+    `edtr_rating` int,
     `edtr_tarif` decimal(10,2),
     PRIMARY KEY (`edtr_id`)
 );
@@ -122,6 +122,35 @@ CREATE TABLE `fotografer` (
     PRIMARY KEY (`ftg_id`)
 );
 
+CREATE TABLE `kategori_jasa` (
+    `ktg_id` int NOT NULL AUTO_INCREMENT,
+    `ktg_kategori` varchar(64),
+    PRIMARY KEY (`ktg_id`)
+);
+
+CREATE TABLE `fotografer_kategori` (
+    `ftg_id` int(11) NOT NULL,
+    `ktg_id` int NOT NULL,
+    PRIMARY KEY (`ftg_id`, `ktgf_id`),
+    FOREIGN KEY (`ftg_id`) REFERENCES `fotografer`(`ftg_id`),
+    FOREIGN KEY (`ktg_id`) REFERENCES `kategori_jasa`(`ktg_id`)
+);
+
+CREATE TABLE `editor_kategori` (
+    `edtr_id` int(11) NOT NULL,
+    `ktg_id` int NOT NULL,
+    PRIMARY KEY (`edtr_id`, `ktgf_id`),
+    FOREIGN KEY (`edtr_id`) REFERENCES `editor`(`edtr_id`),
+    FOREIGN KEY (`ktg_id`) REFERENCES `kategori_jasa`(`ktg_id`)
+);
+
+CREATE TABLE `penyewaan_alat_kategori` (
+    `palat_id` int(11) NOT NULL,
+    `ktg_id` int NOT NULL,
+    PRIMARY KEY (`palat_id`, `ktgf_id`),
+    FOREIGN KEY (`palat_id`) REFERENCES `penyewaan_alat`(`palat_id`),
+    FOREIGN KEY (`ktg_id`) REFERENCES `kategori_jasa`(`ktg_id`)
+);
 
 CREATE TABLE `dimiliki_oleh` (
     `prtf_id` int NOT NULL,
@@ -132,10 +161,10 @@ CREATE TABLE `dimiliki_oleh` (
 );
 
 CREATE TABLE `penyedia_jasa_rangkap`(
-    `palat_id` int NOT NULL,
-    `pjasa_id` int(11) NOT NULL,
-    `ftg_id` int(11) NOT NULL,
-    `edtr_id` int(11) NOT NULL,
+    `palat_id` int,
+    `pjasa_id` int(11),
+    `ftg_id` int(11),
+    `edtr_id` int(11),
     `pjr_rangkap` varchar(256),
     FOREIGN KEY (`palat_id`) REFERENCES `penyewaan_alat`(`palat_id`),
     FOREIGN KEY (`pjasa_id`) REFERENCES `penyedia_jasa`(`pjasa_id`),
