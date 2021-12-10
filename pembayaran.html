@@ -27,8 +27,9 @@ h4.text-danger {
     color: #f11126 !important
 }
 
-h4.text-success {
+h3.text-success {
     margin-left: 250px;
+    font-weight: bold;
 }
 
 .htwo {
@@ -54,6 +55,10 @@ h4.text-success {
 
 h3.payment {
     margin-top: 30px
+}
+
+h4.jasa {
+    color: rgb(0, 0, 0);
 }
 
 h6.payment-method {
@@ -118,9 +123,15 @@ div.col-2 {
     padding-left: 1rem;
 }
 
-/* .row.r5 .h4 {
-    float: right;
-} */
+.col .card {
+    box-shadow: 0 1px 10px 5px rgba(0, 0, 0, 0.05);
+    border: none;
+}
+
+.col.mx-auto .card-body.payment{
+    box-shadow: 0 1px 10px 5px rgba(0, 0, 0, 0.05);
+    padding-left: 6%;
+}
 
 @media screen and (max-width: 1200px) {
     .rcol {
@@ -146,14 +157,57 @@ div.col-2 {
                                 <div class="container m-5 mx-auto">
     <div class="row main">
         <div class="col-lg-6 col-12 my-5 rcol">
-            <h3 class="product text-center">PRODUCT DETAILS</h3>
-            <div class="image text-center"><img src="https://images-na.ssl-images-amazon.com/images/I/61TLUy%2BepGL._SX425_.jpg" width="300px" height="350px"></div>
-            <p class="text-center my-3">Toilet paper is a tissue paper product primarily used to clean<br>the anus and surrounding area of feces after defecation,<br> and to clean the vulva and perineum of puppies</p>
+            <h3 class="product text-center">DETAIL PESANAN</h3>
+            <div class="col mx-auto">
+                <div class="card h-100 text-center">
+                  <img src="/assets/img/blog/comments-1.jpg" width=100px height=100px style="margin-top: 5%;" class="rounded-circle mx-auto" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">Elok Lucita</h5>
+                    <p class="card-text">“  I’m a freelance photographer based in Surabaya. 
+                        Started my early career as a portrait photographer. 
+                        I also shoot product, fashion, couple, pre-wedding and maternity :) ”
+                    </p>
+                    <p<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                    </svg><a href="#">@lorem</a></p>
+                  </div>
+                </div>
+              </div>
+            <h4 class="jasa text-center font-weight-bold" style="margin: 20px;">Fotografi</h4>
+            <div class="form-group">
+                <label for="place">Tanggal</label>
+                <div class="input-group">
+                  <p class="form-control text-muted" type="text" name="tanggal">12/10/2021</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="place">Waktu Mulai</label>
+                <div class="input-group">
+                  <p class="form-control text-muted" type="text" name="start_time">15:30:00</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="place">Waktu Selesai</label>
+                <div class="input-group">
+                  <p class="form-control text-muted" type="text" name="end_time">17:30:00</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="place">Tempat</label>
+                <div class="input-group">
+                  <p class="form-control text-muted" type="text" name="tempat">Kenjeran Park</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="place">Catatan</label>
+                <div class="input-group">
+                  <p class="form-control text-muted" type="text" name="note">-</p>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-6 col-12 my-5 scol">
+        <div class="col mx-auto my-5" style="padding-right: 3%;">
             <div class="row r1">
-                <h6 class="text-muted">ORDER TOTAL:</h6>
-                <h4 class="text-success">250.000</h4>
+                <h6 class="text-muted" style="margin-left: 3%;">ORDER TOTAL:</h6>
+                <h3 class="text-success">Rp.250.000</h3>
             </div>
             <!-- <div class="row r2">
                 <h6>Portrait Fotografi</h6>
@@ -162,11 +216,13 @@ div.col-2 {
             <div class="row r3">
                 <h3 class="payment">PAYMENT DETAILS</h3>
             </div> -->
+            <div class="card-body payment">
             <div class="row r4 text-justify" style="width: 90%;">
                 <h6 class="payment-method" style="margin-bottom: 5%;">Silahkan lakukan pembayaran pada satu diantara metode pembayaran berikut 
                     dalam jangka waktu 1x6 jam agar pesanan Anda dapat kami proses. Jika melebihi dari batas waktu yang ditentukan, status 
                     pemesanan Anda akan hangus, cek ketentuan lainnya di <a href="#">Terms and Conditions.</a></h6>
             </div>
+
             <div class="row r4">
                 <h6 class="payment-method" style="margin-bottom: 5%; margin-top: 20px">Pilih Metode Pembayaran:</h6>
             </div>
@@ -200,10 +256,14 @@ div.col-2 {
                     </div>
                 </div>
             </div>
-            <div class="row r6">
-                <form class="personalDetails">
-                    <button type="submit" class="btn btn-danger mt-3">Batalkan Pemesanan</button>
-                </form>
+            <div class="row r4 text-justify" style="width: 90%;">
+                <h6 class="payment-method">Notifikasi pembayaran akan Anda terima melalui nomer ponsel 
+                    Anda yang terdaftar setelah sistem kami mendeteki pembayaran Anda. Simpan bukti pembayaran jika diperlukan sewaktu-waktu. 
+                    Terima Kasih sudah mempecayakan urusan fotografi Anda pada viufinder.</h6>
+            </div>
+            <div class="row r6" style="padding: 0% 25% 0% 25%; margin-bottom: 5%;">
+                <button type="submit" class="btn btn-danger mt-3 aligncenter">Batalkan Pemesanan</button>
+            </div>
             </div>
         </div>
     </div>
