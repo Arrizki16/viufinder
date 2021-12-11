@@ -1,4 +1,6 @@
-
+<?php
+session_start();
+?>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -23,43 +25,52 @@
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/389e9b29e9.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-        <div class="container">
-          <a class="navbar-brand" href="index.php">Viufinder</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav navkanan">
-              <nav class="navbar navbar-dark bg-dark">
-                <div class="container">
-                  <a class="navbar-brand" href="index.php">
-                    <img src="/assets/img/home.png" alt="" width="30" height="20" class="rounded" />
-                  </a>
-                </div>
-              </nav>
-              <nav class="navbar navbar-dark bg-dark">
-                <div class="container">
-                  <a class="navbar-brand" href="#">
-                    <img src="/assets/img/blog/comments-1.jpg" width="30" height="20" class="rounded-circle" alt="Sample image" />
-                  </a>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <!-- ======= Header ======= -->
+    <header id="header" class="sticky-top d-flex align-items-center bg-black">
+      <div class="container d-flex align-items-center justify-content-between">
+  
+        <h1 class="logo"><a href="index.php">Viufinder</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <?php
+          if(isset($_SESSION['email'])) {
+        ?>
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li><a class="nav-link scrollto" href="dashboard_carijasa.php">Dashboard</a></li>
+            <li>
+              <div class="dropdown">
+                <!-- <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dropdown button
+                </button> -->
+                <a class="getstarted scrollto dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <?php echo $_SESSION['email']; ?>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="profil_carijasa.php">Profil</a>
+                  <a class="dropdown-item" href="logout.php">Keluar</a>
+                </ul>
+              </div>
+            </li>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+        <?php
+          }
+        ?>
+      </div>
     </header>
+    <!-- End Header -->
 
     <div class="s008">
       <form>
         <div class="inner-form">
           <div class="advance-search">
-            <span class="awal"><a href="index.php">Beranda</a> > <a href="carialat.php">Cari Editor</a></span>
+            <span class="awal"><a href="index.html">Beranda</a> > <a href="carieditor.html">Cari Fotografer</a></span>
             <span class="desc">Cari Berdasarkan</span>
             <div class="row">
               <div class="input-field">
@@ -159,16 +170,16 @@
                 $location = (isset($_GET['lokasi'])) ? $_GET['lokasi'] : '';
                 echo $name;
                 
-                $penyewaan_alat = "SELECT p.pjasa_id, p.pjasa_nama, p.pjasa_alamat, p.pjasa_foto, f.*, k.* FROM penyedia_jasa AS p
+                $editor = "SELECT p.pjasa_id, p.pjasa_nama, p.pjasa_alamat, p.pjasa_foto, f.*, k.* FROM penyedia_jasa AS p
                                 INNER JOIN penyedia_jasa_rangkap AS r ON p.pjasa_id = r.pjasa_id
-                                INNER JOIN penyewaan_alat as f ON r.palat_id = f.palat_id
-                                INNER JOIN penyewaan_alat_kategori fk ON fk.palat_id = f.palat_id
+                                INNER JOIN editor as f ON r.edtr_id = f.edtr_id
+                                INNER JOIN editor_kategori fk ON fk.edtr_id = f.edtr_id
                                 INNER JOIN kategori_jasa k ON k.ktg_id = fk.ktg_id";
-                $query = "SELECT DISTINCT(pjasa_id), pjasa_nama, pjasa_alamat, palat_id, palat_rating, palat_tarif FROM ($penyewaan_alat) palat
+                $query = "SELECT DISTINCT(pjasa_id), pjasa_nama, pjasa_alamat, edtr_id, edtr_rating, edtr_tarif FROM ($editor) edtr
                           WHERE pjasa_nama LIKE '%$name%'
                           AND pjasa_alamat LIKE '%$location%'
-                          AND palat_rating > $ratingMin AND palat_rating <= $ratingMax
-                          AND palat_tarif > $priceMin AND palat_tarif <= $priceMax
+                          AND edtr_rating > $ratingMin AND edtr_rating <= $ratingMax
+                          AND edtr_tarif > $priceMin AND edtr_tarif <= $priceMax
                           AND ktg_kategori LIKE '%$category%'";
                 $result = mysqli_query($conn, $query);
 
@@ -176,7 +187,7 @@
                   while($row = $result->fetch_assoc()){
                     $nama = $row['pjasa_nama'];
                     $id = $row['pjasa_id'];
-                    $palatid = $row['palat_id'];
+                    $edtrid = $row['edtr_id'];
                     $alamat = $row['pjasa_alamat'];
                   ?>
                   <div class="col mx-auto">
@@ -189,7 +200,7 @@
                         </div>
                         <p class="card-text">
                           <?php
-                            $rating = $row['palat_rating'];
+                            $rating = $row['edtr_rating'];
                             for ($i=0; $i < $rating; $i++) { 
                               echo '<i class="fas fa-star"></i>';
                             }
@@ -198,9 +209,9 @@
                         <p>
                           <?php
                             $kategori = "SELECT ktg_kategori FROM kategori_jasa AS k
-                                        INNER JOIN penyewaan_alat_kategori AS fk ON k.ktg_id = fk.ktg_id
-                                        INNER JOIN penyewaan_alat AS f ON fk.palat_id = f.palat_id
-                                        WHERE f.palat_id = $palatid";
+                                        INNER JOIN editor_kategori AS fk ON k.ktg_id = fk.ktg_id
+                                        INNER JOIN editor AS f ON fk.edtr_id = f.edtr_id
+                                        WHERE f.edtr_id = $edtrid";
                             $resultKategori = mysqli_query($conn, $kategori);
                             echo "Kategori: <br>";
                             while($rowKategori = $resultKategori->fetch_assoc()){
@@ -214,11 +225,11 @@
                         </p>
                         <p>
                           <?php
-                            $tarif = $row['palat_tarif'];
+                            $tarif = $row['edtr_tarif'];
                             echo "Rp. ".$tarif."/jam";
                           ?>
                         </p>
-                        <a href="profil_sediajasa.php?id= <?php echo $id; ?>" class="btn btn-primary text-white">Kunjungi Profil</a>
+                        <a href="profil_sediajasa.php?id=<?php echo $id; ?>" class="btn btn-primary text-white">Kunjungi Profil</a>
                       </div>
                     </div>
                   </div>     

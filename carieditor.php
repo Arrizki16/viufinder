@@ -1,4 +1,6 @@
-
+<?php
+session_start();
+?>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -23,37 +25,46 @@
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/389e9b29e9.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-        <div class="container">
-          <a class="navbar-brand" href="index.html">Viufinder</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav navkanan">
-              <nav class="navbar navbar-dark bg-dark">
-                <div class="container">
-                  <a class="navbar-brand" href="index.html">
-                    <img src="/assets/img/home.png" alt="" width="30" height="20" class="rounded" />
-                  </a>
-                </div>
-              </nav>
-              <nav class="navbar navbar-dark bg-dark">
-                <div class="container">
-                  <a class="navbar-brand" href="#">
-                    <img src="/assets/img/blog/comments-1.jpg" width="30" height="20" class="rounded-circle" alt="Sample image" />
-                  </a>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <!-- ======= Header ======= -->
+    <header id="header" class="sticky-top d-flex align-items-center bg-black">
+      <div class="container d-flex align-items-center justify-content-between">
+  
+        <h1 class="logo"><a href="index.php">Viufinder</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <?php
+          if(isset($_SESSION['email'])) {
+        ?>
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li><a class="nav-link scrollto" href="dashboard_carijasa.php">Dashboard</a></li>
+            <li>
+              <div class="dropdown">
+                <!-- <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dropdown button
+                </button> -->
+                <a class="getstarted scrollto dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <?php echo $_SESSION['email']; ?>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="profil_carijasa.php">Profil</a>
+                  <a class="dropdown-item" href="logout.php">Keluar</a>
+                </ul>
+              </div>
+            </li>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+        <?php
+          }
+        ?>
+      </div>
     </header>
+    <!-- End Header -->
 
     <div class="s008">
       <form>
@@ -218,7 +229,7 @@
                             echo "Rp. ".$tarif."/jam";
                           ?>
                         </p>
-                        <a href="profil_sediajasa.php?id= <?php echo $id; ?>" class="btn btn-primary text-white">Kunjungi Profil</a>
+                        <a href="profil_sediajasa.php?id=<?php echo $id; ?>" class="btn btn-primary text-white">Kunjungi Profil</a>
                       </div>
                     </div>
                   </div>     

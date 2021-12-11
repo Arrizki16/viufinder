@@ -1,3 +1,22 @@
+<?php
+session_start();
+if(!isset($_SESSION['email'])){
+  header("location: index.php");
+}
+$sediajasaid = (isset($_GET['id']) ? $_GET['id'] : null);
+$user_type = (isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null);
+if(is_null($sediajasaid)){
+  header('Location: index.php');
+} else {
+  include_once("database/db_connection.php");
+  $query = "SELECT * FROM penyedia_jasa WHERE pjasa_id = '$sediajasaid'";
+  $result = $conn->query($query);
+  $sediajasadata = $result->fetch_assoc();
+  if(!$sediajasadata){
+    header('Location: index.php');
+  }
+} 
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,34 +46,57 @@
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet">  
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">Viufinder</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav navkanan">
-            <nav class="navbar navbar-dark bg-dark">
-              <div class="container">
-                <a class="navbar-brand" href="index.html">
-                  <img src="/assets/img/home.png" alt="" width="30" height="20" class="rounded" />
-                </a>
-              </div>
-            </nav>
-            <nav class="navbar navbar-dark bg-dark">
-              <div class="container">
-                <a class="navbar-brand" href="#">
-                  <img src="/assets/img/blog/comments-1.jpg" width="30" height="20" class="rounded-circle" alt="Sample image" />
-                </a>
-              </div>
-            </nav>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <!-- ======= Header ======= -->
+  <header id="header" class="sticky-top d-flex align-items-center bg-black">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="dashboard_carijasa.php">Viufinder</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto" 
+            href="dashboard_<?php
+                if($user_type == 'penyedia_jasa'){
+                  echo "sediajasa";
+                } else if ($user_type == 'pencari_jasa'){
+                  echo "carijasa";
+                } else if ($user_type == 'admin'){
+                  echo "admin";
+                }
+              ?>.php">Dashboard</a></li>
+          <li>
+            <div class="dropdown">
+              <a class="getstarted scrollto dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <?php echo $_SESSION['email']; ?>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" 
+                  href="profil_<?php
+                    if($user_type == 'penyedia_jasa'){
+                      echo "sediajasa";
+                    } else if ($user_type == 'pencari_jasa'){
+                      echo "carijasa";
+                    } else if ($user_type == 'admin'){
+                      echo "admin";
+                    }
+                  ?>.php">Profil</a>
+                <a class="dropdown-item" href="logout.php">Keluar</a>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+
+    </div>
+  </header>
+  <!-- End Header -->
+
     <header>
       <div class="container">
         <div class="profile">
@@ -63,13 +105,22 @@
           </div>
 
           <div class="profile-user-settings">
-            <h1 class="profile-user-name">janedoe_</h1>
-
-            <a class="btn btn-primary profil-edit-button" href="pesanJasa/pesan_fotografer.html" role="button">Pesan jasa</a>
-          </div>
-
-          <div class="profile-bio">
-            <p><span class="profile-real-name">Jane Doe</span> Lorem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
+            <h1 class="profile-user-name">
+              <?php echo $sediajasadata['pjasa_nama']; ?>
+            </h1>
+            <h3>
+              <?php echo $sediajasadata['pjasa_alamat']; ?>
+            </h3>
+            <?php
+              if($user_type == 'penyedia_jasa'){
+                echo '<a class="btn btn-primary" href="dashboard_sediajasa.php" role="button">Ubah Data</a>';
+              } else if ($user_type == 'pencari_jasa'){
+                echo '<a class="btn btn-primary" href="pemesanan.php?id='.$sediajasadata['pjasa_id'].'" role="button">Pesan Jasa</a>';
+              } else if ($user_type == 'admin'){
+                echo '<a class="btn btn-primary" href="dashboard_sediajasa.php" role="button">Ubah Data</a>';
+              }
+            ?>
+            
           </div>
         </div>
         <!-- End of profile section -->

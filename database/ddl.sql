@@ -1,5 +1,3 @@
-alter table `pemesanan_jasa` 
-drop constraint fk_ulsn_id;
 DROP TABLE IF EXISTS `metode_bayar`;
 DROP TABLE IF EXISTS `terverifikasi`;
 DROP TABLE IF EXISTS `ulasan`;
@@ -178,14 +176,34 @@ CREATE TABLE `penyedia_jasa_rangkap`(
     FOREIGN KEY (`edtr_id`) REFERENCES `editor`(`edtr_id`)
 );
 
+CREATE TABLE `metode_bayar` (
+    `mtd_id` int NOT NULL AUTO_INCREMENT,
+    `mtd_nama` varchar(256),
+    `mtd_deskripsi` varchar(1024),
+    `mtd_nomertf` varchar(100),
+    PRIMARY KEY (`mtd_id`)
+);
+
+CREATE TABLE `ulasan` (
+    `ulsn_id` int NOT NULL AUTO_INCREMENT,
+    `ulsn_deskripsi` varchar(1024),
+    `ulsn_rating` int,
+    `ulsn_tgl` date,
+    PRIMARY KEY (`ulsn_id`)
+);
+
 CREATE TABLE `pemesanan_jasa` (
     `pjasa_id` int(11) NOT NULL,
     `pmsn_id` int NOT NULL AUTO_INCREMENT,
     `pcr_id` int(11) NOT NULL,
-    `ulsn_id` int NOT NULL,
-    `pmsn_waktu` datetime,
+    `ulsn_id` int,
+    `mtd_id` int NOT NULL,
+    `pmsn_tanggal` date,
+    `pmsn_waktu_mulai` time,
+    `pmsn_waktu_selesai` time,
     `pmsn_catatan` varchar(1024),
     `pmsn_status` varchar(100),
+    `pmsn_lokasi` varchar(256),
     `pmsn_foto1` mediumblob,
     `pmsn_foto2` mediumblob,
     `pmsn_foto3` mediumblob,
@@ -207,35 +225,8 @@ CREATE TABLE `pemesanan_jasa` (
     `pmsn_alt9` varchar(256),
     `pmsn_alt10` varchar(256),
     PRIMARY KEY (`pmsn_id`, `pjasa_id`),
+    FOREIGN KEY (`mtd_id`) REFERENCES `metode_bayar`(`mtd_id`),
     FOREIGN KEY (`pjasa_id`) REFERENCES `penyedia_jasa`(`pjasa_id`),
-    FOREIGN KEY (`pcr_id`) REFERENCES `pencari_jasa`(`pcr_id`)
-);
-
-CREATE TABLE `ulasan` (
-    `pjasa_id` int(11) NOT NULL,
-    `ulsn_id` int NOT NULL AUTO_INCREMENT,
-    `pmsn_id` int NOT NULL,
-    `ulsn_deskripsi` varchar(1024),
-    `ulsn_rating` int,
-    `ulsn_tgl` date,
-    FOREIGN KEY (`pjasa_id`) REFERENCES `penyedia_jasa`(`pjasa_id`),
-    FOREIGN KEY (`pmsn_id`) REFERENCES `pemesanan_jasa`(`pmsn_id`),
-    PRIMARY KEY (`ulsn_id`)
-);
-
-alter table `pemesanan_jasa` 
-add constraint fk_ulsn_id 
-foreign key (`ulsn_id`) 
-references `ulasan`(`ulsn_id`);
-
-CREATE TABLE `metode_bayar` (
-    `mtd_id` int NOT NULL AUTO_INCREMENT,
-    `pjasa_id` int(11) NOT NULL,
-    `pmsn_id` int NOT NULL,
-    `mtd_nama` varchar(256),
-    `mtd_deskripsi` varchar(1024),
-    `mtd_nomertf` varchar(100),
-    PRIMARY KEY (`mtd_id`),
-    FOREIGN KEY (`pjasa_id`) REFERENCES `penyedia_jasa`(`pjasa_id`),
-    FOREIGN KEY (`pmsn_id`) REFERENCES `pemesanan_jasa`(`pmsn_id`)
+    FOREIGN KEY (`pcr_id`) REFERENCES `pencari_jasa`(`pcr_id`),
+    FOREIGN KEY (`ulsn_id`) REFERENCES `ulasan`(`ulsn_id`)
 );

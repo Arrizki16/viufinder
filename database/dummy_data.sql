@@ -69,3 +69,10 @@ INSERT INTO penyedia_jasa_rangkap (pjasa_id, ftg_id, edtr_id, palat_id) VALUES (
 INSERT INTO penyedia_jasa_rangkap (pjasa_id, ftg_id, edtr_id, palat_id) VALUES (4, null, 2, 3);
 INSERT INTO penyedia_jasa_rangkap (pjasa_id, ftg_id, edtr_id, palat_id) VALUES (5, 4, 3, null);
 INSERT INTO penyedia_jasa_rangkap (pjasa_id, ftg_id, edtr_id, palat_id) VALUES (6, null, 4, 4);
+
+INSERT INTO pencari_jasa (pcr_nama, pcr_email, pcr_password) VALUES ('Daanii', 'danynabilgk@gmail.com', 'katasandi');
+
+INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('LinkAja', '08123456789');
+INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('BNI', '123-123-123');
+INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('GoPay', '08235551112');
+INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('BCA', '230-123-321');
