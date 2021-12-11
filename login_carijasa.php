@@ -21,7 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         while($row = $result->fetch_assoc()) {
             if ($row["pcr_password"] == $password) {
               $_SESSION['email'] = $row['pcr_email'];
-              header('Location: index.php');
+			  $_SESSION['user_type'] = 'pencari_jasa';
+			  
+              header('Location: dashboard_carijasa.php');
             } else {
                 echo "<script>alert('Email atau password Anda salah. Silahkan coba lagi!')</script>";
             }

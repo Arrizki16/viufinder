@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         while($row = $result->fetch_assoc()) {
             if ($row["pjasa_password"] == $password) {
               $_SESSION['email'] = $row['pjasa_email'];
+			  $_SESSION['user_type'] = 'penyedia_jasa';
               header('Location: index.php');
             } else {
                 echo "<script>alert('Email atau password Anda salah. Silahkan coba lagi!')</script>";

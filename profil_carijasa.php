@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
+  if($_SESSION['user_type'] != 'pencari_jasa') {
+    header('Location: index.php');
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,8 +37,21 @@
     
           <nav id="navbar" class="navbar">
             <ul>
-              <li><a class="nav-link scrollto" href="dashboardCarijasa.html">Home</a></li>
-              <li><a class="nav-link scrollto active" href="profil_carijasa.html">Profile</a></li>
+              <li><a class="nav-link scrollto" href="dashboard_carijasa.php">Dashboard</a></li>
+              <li>
+            <div class="dropdown">
+              <!-- <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown button
+              </button> -->
+              <a class="getstarted scrollto dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <?php echo $_SESSION['email']; ?>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="profil_carijasa.php">Profil</a>
+                <a class="dropdown-item" href="logout.php">Keluar</a>
+              </ul>
+            </div>
+          </li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
           </nav>

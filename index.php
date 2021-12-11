@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+if (isset($_SESSION['email']) && isset($_SESSION['user_type'])) {
+  if($_SESSION['user_type'] == 'pencari_jasa') {
+    header('Location: dashboard_carijasa.php');
+  }
+  
+// } else if (isset($_SESSION['email']) && $_SESSION['user_type'] == 'penyedia_jasa') {
+//   header('Location: dashboard_sediajasa.php');
+// } else if (isset($_SESSION['email']) && $_SESSION['user_type'] == 'admin') {
+//   header('Location: dashboard_admin.php');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -103,7 +118,8 @@
       </a>
 
     </div>
-  </section><!-- End Hero -->
+  </section>
+  <!-- End Hero -->
 
   <main id="main">
 
@@ -224,7 +240,6 @@
     </section>
     <!-- End Services Section -->
 
-
     <!-- ======= Pricing Section ======= -->
     <section id="pricing" class="pricing">
       <div class="container" data-aos="fade-up">
@@ -247,7 +262,7 @@
                 <li>tidak ada pembatalan pemesanan</li>
               </ul> 
               <div class="btn-wrap">
-                <a href="carifotografer.html" class="btn-buy">Pesan</a>
+                <a href="carifotografer.php" class="btn-buy">Pesan</a>
               </div>
             </div>
           </div>

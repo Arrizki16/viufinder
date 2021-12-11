@@ -1,3 +1,5 @@
+alter table `pemesanan_jasa` 
+drop constraint fk_ulsn_id;
 DROP TABLE IF EXISTS `metode_bayar`;
 DROP TABLE IF EXISTS `terverifikasi`;
 DROP TABLE IF EXISTS `ulasan`;
@@ -8,6 +10,10 @@ DROP TABLE IF EXISTS `verifikasi_pendaftar`;
 DROP TABLE IF EXISTS `pencari_jasa`;
 DROP TABLE IF EXISTS `penyedia_jasa`;
 DROP TABLE IF EXISTS `admin_web`;
+DROP TABLE IF EXISTS `fotografer_kategori`;
+DROP TABLE IF EXISTS `editor_kategori`;
+DROP TABLE IF EXISTS `penyewaan_alat_kategori`;
+DROP TABLE IF EXISTS `kategori_jasa`;
 DROP TABLE IF EXISTS `penyewaan_alat`;
 DROP TABLE IF EXISTS `portofolio`;
 DROP TABLE IF EXISTS `editor`;
@@ -131,7 +137,7 @@ CREATE TABLE `kategori_jasa` (
 CREATE TABLE `fotografer_kategori` (
     `ftg_id` int(11) NOT NULL,
     `ktg_id` int NOT NULL,
-    PRIMARY KEY (`ftg_id`, `ktgf_id`),
+    PRIMARY KEY (`ftg_id`, `ktg_id`),
     FOREIGN KEY (`ftg_id`) REFERENCES `fotografer`(`ftg_id`),
     FOREIGN KEY (`ktg_id`) REFERENCES `kategori_jasa`(`ktg_id`)
 );
@@ -139,7 +145,7 @@ CREATE TABLE `fotografer_kategori` (
 CREATE TABLE `editor_kategori` (
     `edtr_id` int(11) NOT NULL,
     `ktg_id` int NOT NULL,
-    PRIMARY KEY (`edtr_id`, `ktgf_id`),
+    PRIMARY KEY (`edtr_id`, `ktg_id`),
     FOREIGN KEY (`edtr_id`) REFERENCES `editor`(`edtr_id`),
     FOREIGN KEY (`ktg_id`) REFERENCES `kategori_jasa`(`ktg_id`)
 );
@@ -147,7 +153,7 @@ CREATE TABLE `editor_kategori` (
 CREATE TABLE `penyewaan_alat_kategori` (
     `palat_id` int(11) NOT NULL,
     `ktg_id` int NOT NULL,
-    PRIMARY KEY (`palat_id`, `ktgf_id`),
+    PRIMARY KEY (`palat_id`, `ktg_id`),
     FOREIGN KEY (`palat_id`) REFERENCES `penyewaan_alat`(`palat_id`),
     FOREIGN KEY (`ktg_id`) REFERENCES `kategori_jasa`(`ktg_id`)
 );

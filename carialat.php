@@ -1,0 +1,308 @@
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="colorlib.com" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,600,700" rel="stylesheet" />
+    <link href="assets/css/main.css" rel="stylesheet" />
+    <link href="assets/img/favicon.png" rel="icon" />
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet" />
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/389e9b29e9.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container">
+          <a class="navbar-brand" href="index.php">Viufinder</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav navkanan">
+              <nav class="navbar navbar-dark bg-dark">
+                <div class="container">
+                  <a class="navbar-brand" href="index.php">
+                    <img src="/assets/img/home.png" alt="" width="30" height="20" class="rounded" />
+                  </a>
+                </div>
+              </nav>
+              <nav class="navbar navbar-dark bg-dark">
+                <div class="container">
+                  <a class="navbar-brand" href="#">
+                    <img src="/assets/img/blog/comments-1.jpg" width="30" height="20" class="rounded-circle" alt="Sample image" />
+                  </a>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="s008">
+      <form>
+        <div class="inner-form">
+          <div class="advance-search">
+            <span class="awal"><a href="index.php">Beranda</a> > <a href="carialat.php">Cari Editor</a></span>
+            <span class="desc">Cari Berdasarkan</span>
+            <div class="row">
+              <div class="input-field">
+                <span>Nama</span>
+                <div class="mb-3 email">
+                  <input type="text" class="form-control" id="nama" aria-describedby="emailHelp" placeholder="Nama" />
+                </div>
+              </div>
+              <div class="input-field">
+                <span>Lokasi</span>
+                <div class="input-select">
+                  <select id="lokasi" data-trigger="" name="choices-single-defaul">
+                    <option placeholder="" value="">Semua lokasi</option>
+                    <option>Jakarta</option>
+                    <option>Surabaya</option>
+                    <option>Malang</option>
+                  </select>
+                </div>
+              </div>
+              <div class="input-field">
+                <span>Harga</span>
+                <div class="input-select">
+                  <select id="harga" data-trigger="" name="choices-single-defaul">
+                    <option placeholder="" value="">Semua harga</option>
+                    <option>10000 - 50000/jam</option>
+                    <option>51000 - 100000/jam</option>
+                    <option>101000 - 250000/jam</option>
+                    <option>251000 - 500000/jam</option>
+                    <option>500000 - 1000000/jam</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col input-field">
+                <span>Kategori</span>
+                <div class="input-select">
+                  <select id="kategori" data-trigger="" name="choices-single-defaul">
+                    <option placeholder="" value="">Semua kategori</option>
+                    <option>Prewedding</option>
+                    <option>Wedding</option>
+                    <option>Baby Shoot</option>
+                    <option>Family</option>
+                    <option>Portrait</option>
+                    <option>Maternity</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col input-field">
+                <span>Rating</span>
+                <div class="input-select">
+                  <select id="rating" data-trigger="" name="choices-single-defaul">
+                    <option placeholder="" value="">Semua rating</option>
+                    <option>Belum Ada Rating</option>
+                    <option>0 - 1 Rating</option>
+                    <option>1 - 2 Rating</option>
+                    <option>2 - 3 Rating</option>
+                    <option>3 - 4 Rating</option>
+                    <option>4 - 5 Rating</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div><br></div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="searchbutton1">
+      <div class="container">
+        <div class="row">
+          <div class="input-field">
+            <div class="group-btn">
+              <button class="btn btn-primary" onclick="search()">Temukan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="foto">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col lg-12 info-panel">
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+   
+            <?php
+                include_once("database/db_connection.php");
+                $name = (isset($_GET['nama'])) ? $_GET['nama'] : '';
+                $category = (isset($_GET['kategori'])) ? $_GET['kategori'] : '';
+                $ratingMin = (isset($_GET['minrating'])) ? $_GET['minrating'] : 0;
+                $ratingMax = (isset($_GET['maxrating'])) ? $_GET['maxrating'] : 5;
+                $priceMin = (isset($_GET['minharga'])) ? $_GET['minharga'] : 0;
+                $priceMax = (isset($_GET['maxharga'])) ? $_GET['maxharga'] : 1000000;
+                $location = (isset($_GET['lokasi'])) ? $_GET['lokasi'] : '';
+                echo $name;
+                
+                $penyewaan_alat = "SELECT p.pjasa_id, p.pjasa_nama, p.pjasa_alamat, p.pjasa_foto, f.*, k.* FROM penyedia_jasa AS p
+                                INNER JOIN penyedia_jasa_rangkap AS r ON p.pjasa_id = r.pjasa_id
+                                INNER JOIN penyewaan_alat as f ON r.palat_id = f.palat_id
+                                INNER JOIN penyewaan_alat_kategori fk ON fk.palat_id = f.palat_id
+                                INNER JOIN kategori_jasa k ON k.ktg_id = fk.ktg_id";
+                $query = "SELECT DISTINCT(pjasa_id), pjasa_nama, pjasa_alamat, palat_id, palat_rating, palat_tarif FROM ($penyewaan_alat) palat
+                          WHERE pjasa_nama LIKE '%$name%'
+                          AND pjasa_alamat LIKE '%$location%'
+                          AND palat_rating > $ratingMin AND palat_rating <= $ratingMax
+                          AND palat_tarif > $priceMin AND palat_tarif <= $priceMax
+                          AND ktg_kategori LIKE '%$category%'";
+                $result = mysqli_query($conn, $query);
+
+                if ($result->num_rows > 0) {
+                  while($row = $result->fetch_assoc()){
+                    $nama = $row['pjasa_nama'];
+                    $id = $row['pjasa_id'];
+                    $palatid = $row['palat_id'];
+                    $alamat = $row['pjasa_alamat'];
+                  ?>
+                  <div class="col mx-auto">
+                    <div class="card h-100 text-center">
+                      <img src="/assets/img/blog/comments-1.jpg" width=100px height=100px class="rounded-circle mx-auto" alt="...">
+                      <div class="card-body">
+                        <div class="card-title">
+                          <h5><?php echo $nama; ?></h5>
+                          <h7><?php echo $alamat;?></h7>
+                        </div>
+                        <p class="card-text">
+                          <?php
+                            $rating = $row['palat_rating'];
+                            for ($i=0; $i < $rating; $i++) { 
+                              echo '<i class="fas fa-star"></i>';
+                            }
+                          ?>
+                        </p>
+                        <p>
+                          <?php
+                            $kategori = "SELECT ktg_kategori FROM kategori_jasa AS k
+                                        INNER JOIN penyewaan_alat_kategori AS fk ON k.ktg_id = fk.ktg_id
+                                        INNER JOIN penyewaan_alat AS f ON fk.palat_id = f.palat_id
+                                        WHERE f.palat_id = $palatid";
+                            $resultKategori = mysqli_query($conn, $kategori);
+                            echo "Kategori: <br>";
+                            while($rowKategori = $resultKategori->fetch_assoc()){
+                              ?>
+                              <div class="bd-highlight">
+                                <?php echo $rowKategori['ktg_kategori']; ?>
+                              </div>
+                              <?php                             
+                            }
+                          ?>
+                        </p>
+                        <p>
+                          <?php
+                            $tarif = $row['palat_tarif'];
+                            echo "Rp. ".$tarif."/jam";
+                          ?>
+                        </p>
+                        <a href="profil_sediajasa.php?id= <?php echo $id; ?>" class="btn btn-primary text-white">Kunjungi Profil</a>
+                      </div>
+                    </div>
+                  </div>     
+                <?php
+                  }
+                } else {
+                  echo "<h1>Tidak ada hasil</h1>";
+                }
+                ?>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <footer id="footer">
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+  
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Useful Links</h4>
+              <ul>
+                <li><i class="bx bx-chevron-right"></i> <a href="#home">Home</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#about">About</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#services">Services</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+              </ul>
+            </div>
+  
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Our Services</h4>
+              <ul>
+                <li><i class="bx bx-chevron-right"></i> <a href="#services">Fotografer</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#services">Editor</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#services">Penyewaan alat</a></li>
+              </ul>
+            </div>
+  
+            <div class="col-lg-3 col-md-6 footer-contact">
+              <h4>Contact Us</h4>
+              <p>
+                Treasury Tower, 7th Floor<br>
+                Jl. Jenderal Sudirman Kav 52-53, Senayan, 12190<br>
+                <strong>Jakarta</strong><br>
+                <strong>Phone:</strong> +1 5589 55488 55<br>
+                <strong>Email:</strong> info@example.com<br>
+              </p>
+  
+            </div>
+  
+            <div class="col-lg-3 col-md-6 footer-info">
+              <h3>About Viufinder</h3>
+              <p>Penyedia layanan terbaik di Indonesia dibidang fotografi.</p>
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+  
+      <div class="container">
+        <div class="copyright">
+          &copy; Copyright <strong><span>Viufinder</span></strong>
+        </div>
+      </div>
+    </footer><!-- End Footer -->
+    <script src="assets/js/extention/choices.js"></script>
+    <script>
+      const customSelects = document.querySelectorAll("select");
+      const choices = new Choices("select", {
+        searchEnabled: false,
+        itemSelectText: "",
+        removeItemButton: true,
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="assets/js/search.js"></script>
+  </body>
+  <!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
