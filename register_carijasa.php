@@ -15,10 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	$stmt = $conn->prepare('INSERT INTO pencari_jasa (pcr_nama, pcr_email, pcr_password) VALUES (?, ?, ?)');
     $stmt->bind_param('sss', $name, $email, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-	if($result) {
+	if($stmt->execute()) {
 		header('Location: login_carijasa.php');
 	}
 }

@@ -1,5 +1,25 @@
 <?php
 session_start();
+if(!isset($_SESSION['email']) || (isset($_SESSION['user_type']) && $_SESSION['user_type'] != 'pencari_jasa')){
+  header("location:index.php");
+}
+include_once("database/db_connection.php");
+$email = $_SESSION['email'];
+ 
+$query = "SELECT * FROM pencari_jasa WHERE pcr_email='$email'";
+$pcrdata = mysqli_fetch_assoc(mysqli_query($conn, $query));
+$id = $pcrdata['pcr_id'];
+
+if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'selesai'){
+  $pid = $_GET['pid'];
+  $query = "UPDATE pemesanan_jasa SET pmsn_status = 'Selesai' WHERE pmsn_id = '$pid'";
+  mysqli_query($conn, $query);
+}
+if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
+  $pid = $_GET['pid'];
+  $query = "UPDATE pemesanan_jasa SET pmsn_status = 'Dibayar' WHERE pmsn_id = '$pid'";
+  mysqli_query($conn, $query);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +48,7 @@ session_start();
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
+  
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
@@ -67,20 +87,232 @@ session_start();
   </header>
   <!-- End Header -->
 
-  
-
   <main id="main">
-    <!-- ======= Pricing Section ======= -->
-    <section id="pricing" class="pricing">
-      <div class="container">
+
+    <!-- ======= Daftar Pesanan ======= -->
+    <section id="pesanan" class="services">
+      <div class="container" data-aos="fade-up">
+
         <div class="section-title">
-          <?php
-            include_once('database/db_connection.php');
-            $query = "SELECT pcr_nama FROM pencari_jasa WHERE pcr_email = '".$_SESSION['email']."'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            echo "<h2>Selamat datang, ".$row['pcr_nama']."!</h2>";
-          ?>
+          <h2>Selamat Datang, <?php echo $pcrdata['pcr_nama'] ?>!</h2>
+          <h3>Urus pesananmu atau <a href="#carijasa">cari jasa lainnya</a>!</h3>
+        </div>
+        <div class="rounded">
+          <div class="table-responsive table-borderless">
+              <table class="table">
+                  <thead class="table-dark">
+                      <tr>
+                          <th><h4><b>Penyedia Jasa</b></h4></th>
+                          <th><h4><b>Pesanan</b></h4></th>
+                          <th><h4><b>Status</b></h4></th>
+                          <th><h4><b>Jadwal</b></h4></th>
+                          <th><h4><b>Aksi</b></h4></th>
+                      </tr>
+                  </thead>
+                  <tbody class="table-body">
+                      <tr class="table-light">
+                          <td colspan="5">
+                              <b>Pesanan Dipesan</b>
+                          </td>
+                      </tr>
+                      <?php
+                          $query = "SELECT pj.pjasa_nama, pm.* FROM pemesanan_jasa pm
+                                      INNER JOIN penyedia_jasa pj ON pj.pjasa_id = pm.pjasa_id
+                                      WHERE pm.pcr_id = '$id' AND pm.pmsn_status = 'Dipesan'";
+                          $result = mysqli_query($conn, $query);
+                          if ($result->num_rows > 0) {
+                              while($row = $result->fetch_assoc()) {
+                                  echo "<tr>
+                                          <td>".$row['pjasa_nama']."</td>
+                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$row['pmsn_status']."</td>
+                                          <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                          <td>
+                                          </td>
+                                      </tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                          }
+                      ?>
+                      <tr class="table-secondary">
+                          <td colspan="5">
+                              <b>Pesanan Dikonfirmasi</b>
+                          </td>
+                      </tr>
+                      <?php
+                          $query = "SELECT pj.pjasa_nama, pm.* FROM pemesanan_jasa pm
+                                      INNER JOIN penyedia_jasa pj ON pj.pjasa_id = pm.pjasa_id
+                                      WHERE pm.pcr_id = '$id' AND pm.pmsn_status = 'Dikonfirmasi'";
+                          $result = mysqli_query($conn, $query);
+                          if ($result->num_rows > 0) {
+                              while($row = $result->fetch_assoc()) {
+                                  $mtdid = $row['mtd_id'];
+                                  $mtdq = mysqli_query($conn, "SELECT * FROM metode_bayar WHERE mtd_id = '$mtdid'");
+                                  $mtddata = mysqli_fetch_assoc($mtdq);
+                                  echo "<tr>
+                                          <td>".$row['pjasa_nama']."</td>
+                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$row['pmsn_status']."</td>
+                                          <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                          <td>
+                                            <button id='modalInput' type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#bayarModal' 
+                                            data-bs-mtdnama='".$mtddata['mtd_nama']."' data-bs-mtdnotf='".$mtddata['mtd_nomertf']."' data-bs-pid='".$row['pmsn_id']."'>
+                                              Bayar
+                                            </button>
+                                          </td>
+                                      </tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                          }
+                      ?>
+                      <tr class="table-primary">
+                          <td colspan="5">
+                              <b>Pesanan Dibayar</b>
+                          </td>
+                      </tr>
+                      <?php
+                          $query = "SELECT pj.pjasa_nama, pm.* FROM pemesanan_jasa pm
+                                      INNER JOIN penyedia_jasa pj ON pj.pjasa_id = pm.pjasa_id
+                                      WHERE pm.pcr_id = '$id' AND pm.pmsn_status = 'Dibayar'";
+                          $result = mysqli_query($conn, $query);
+                          
+                          if ($result->num_rows > 0) {
+                              while($row = $result->fetch_assoc()) {
+                                  echo "<tr>
+                                          <td>".$row['pjasa_nama']."</td>
+                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$row['pmsn_status']."</td>
+                                          <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                          <td>
+                                          </td>
+                                      </tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                          }
+                      ?>
+                      <tr class="table-info">
+                          <td colspan="5">
+                              <b>Pesanan Dikerjakan</b>
+                          </td>
+                      </tr>
+                      <?php
+                          $query = "SELECT pj.pjasa_nama, pm.* FROM pemesanan_jasa pm
+                                      INNER JOIN penyedia_jasa pj ON pj.pjasa_id = pm.pjasa_id
+                                      WHERE pm.pcr_id = '$id' AND pm.pmsn_status = 'Dikerjakan'";
+                          $result = mysqli_query($conn, $query);
+                          
+                          if ($result->num_rows > 0) {
+                              while($row = $result->fetch_assoc()) {
+                                  echo "<tr>
+                                          <td>".$row['pjasa_nama']."</td>
+                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$row['pmsn_status']."</td>
+                                          <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                          <td>
+                                          <a href='dashboard_carijasa.php?pid=".$row['pmsn_id']."&action=selesai' class='btn btn-success btn-sm'>Selesai</a>
+                                          </td>
+                                      </tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                          }
+                      ?>
+                      <tr class="table-success">
+                          <td colspan="5">
+                              <b>Pesanan Selesai</b>
+                          </td>
+                      </tr>
+                      <?php
+                          $query = "SELECT pj.pjasa_nama, pm.* FROM pemesanan_jasa pm
+                                      INNER JOIN penyedia_jasa pj ON pj.pjasa_id = pm.pjasa_id
+                                      WHERE pm.pcr_id = '$id' AND pm.pmsn_status = 'Selesai'";
+                          $result = mysqli_query($conn, $query);
+                          
+                          if ($result->num_rows > 0) {
+                              while($row = $result->fetch_assoc()) {
+                                  echo "<tr>
+                                          <td>".$row['pjasa_nama']."</td>
+                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$row['pmsn_status']."</td>
+                                          <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                          <td>
+                                          </td>
+                                      </tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                          }
+                      ?>
+                      <tr class="table-warning">
+                          <td colspan="5">
+                              <b>Pesanan Dibatalkan</b>
+                          </td>
+                      </tr>
+                      <?php
+                          $query = "SELECT pj.pjasa_nama, pm.* FROM pemesanan_jasa pm
+                                      INNER JOIN penyedia_jasa pj ON pj.pjasa_id = pm.pjasa_id
+                                      WHERE pm.pcr_id = '$id' AND pm.pmsn_status = 'Dibatalkan'";
+                          $result = mysqli_query($conn, $query);
+                          
+                          if ($result->num_rows > 0) {
+                              while($row = $result->fetch_assoc()) {
+                                  echo "<tr>
+                                          <td>".$row['pjasa_nama']."</td>
+                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$row['pmsn_status']."</td>
+                                          <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                          <td>
+                                          </td>
+                                      </tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                          }
+                      ?>
+                      <tr class="table-danger">
+                          <td colspan="5">
+                              <b>Pesanan Ditolak</b>
+                          </td>
+                      </tr>
+                      <?php
+                          $query = "SELECT pj.pjasa_nama, pm.* FROM pemesanan_jasa pm
+                                      INNER JOIN penyedia_jasa pj ON pj.pjasa_id = pm.pjasa_id
+                                      WHERE pm.pcr_id = '$id' AND pm.pmsn_status = 'Ditolak'";
+                          $result = mysqli_query($conn, $query);
+                          
+                          if ($result->num_rows > 0) {
+                              while($row = $result->fetch_assoc()) {
+                                  echo "<tr>
+                                          <td>".$row['pjasa_nama']."</td>
+                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$row['pmsn_status']."</td>
+                                          <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                          <td>
+                                          </td>
+                                      </tr>";
+                              }
+                          } else {
+                              echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                          }
+                      ?>
+                  </tbody>
+              </table>
+          </div>
+        </div>
+        
+
+      </div>
+    </section>
+    <!-- End Daftar Pesanan -->
+
+    <!-- ======= Pricing Section ======= -->
+    <section id="carijasa" class="pricing">
+      <div class="container">
+      <div class="section-title">
+          <h2>Cari Jasa</h2>
         </div>
 
         <div class="row">
@@ -206,7 +438,26 @@ session_start();
 
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
+  <div class='modal fade' id='bayarModal' tabindex='-1' aria-labelledby='bayarModalTitle' aria-hidden='true'>
+    <div class='modal-dialog modal-dialog-centered'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <h5 class='modal-title' id='bayarModalLabel'>Pembayaran Pesanan</h5>
+          <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+        </div>
+        <div class='modal-body'>
+          <p>Kamu belum melakukan pembayaran pesanan ini. Untuk membayar silahkan transfer ke nomor berikut:</p>
+          <h2 class="text-center"></h2>
+          <h4 class="text-center"></h4>
+          <p>Setelah melakukan pembayaran, silakan melakukan konfirmasi pembayaran untuk melanjutkan pesanan.</p>
+        </div>
+        <div class='modal-footer'>
+          <a type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Tutup</a>
+          <a href="..." type='button' class='btn btn-primary'>Konfirmasi Pembayaran</a>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Vendor JS Files -->
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -214,7 +465,28 @@ session_start();
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script>
+    var modal = document.getElementById('bayarModal')
+    var modalInput = document.getElementById('modalInput')
 
+    modal.addEventListener('shown.bs.modal', function (event) {
+      modalInput.focus();
+      var button = event.relatedTarget;
+      var mtdnama = button.getAttribute('data-bs-mtdnama');
+      var mtdnotf = button.getAttribute('data-bs-mtdnotf');
+      var pid = button.getAttribute('data-bs-pid');
+
+      var notf = modal.querySelector('h2');
+      var nama = modal.querySelector('h4');
+      var konfirmbtn = modal.querySelector('.btn-primary');
+      var href = "dashboard_carijasa.php?pid=" + pid + "&action=bayar";
+
+      notf.textContent = mtdnotf;
+      nama.textContent = mtdnama;
+      konfirmbtn.setAttribute('href', href);
+      console.log(konfirmbtn.href);
+    })
+  </script>
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 

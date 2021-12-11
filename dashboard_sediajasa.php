@@ -1,3 +1,36 @@
+<?php
+session_start();
+if(!isset($_SESSION['email']) || (isset($_SESSION['user_type']) && $_SESSION['user_type'] != 'penyedia_jasa')){
+    header("location:index.php");
+}
+include_once("database/db_connection.php");
+$email = $_SESSION['email'];
+   
+$query = "SELECT * FROM penyedia_jasa WHERE pjasa_email='$email'";
+$pjasadata = mysqli_fetch_assoc(mysqli_query($conn, $query));
+$id = $pjasadata['pjasa_id'];
+
+if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'terima'){
+    $pid = $_GET['pid'];
+    $query = "UPDATE pemesanan_jasa SET pmsn_status = 'Dikonfirmasi' WHERE pmsn_id = '$pid'";
+    mysqli_query($conn, $query);
+} 
+if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'tolak'){
+    $pid = $_GET['pid'];
+    $query = "UPDATE pemesanan_jasa SET pmsn_status = 'Ditolak' WHERE pmsn_id = '$pid'";
+    mysqli_query($conn, $query);
+}
+if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'batal'){
+    $pid = $_GET['pid'];
+    $query = "UPDATE pemesanan_jasa SET pmsn_status = 'Dibatalkan' WHERE pmsn_id = '$pid'";
+    mysqli_query($conn, $query);
+}
+if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'kerja'){
+    $pid = $_GET['pid'];
+    $query = "UPDATE pemesanan_jasa SET pmsn_status = 'Dikerjakan' WHERE pmsn_id = '$pid'";
+    mysqli_query($conn, $query);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,27 +47,43 @@
 
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <header id="header" class="fixed-top d-flex ">
-        <div class="container d-flex align-items-center ">
-    
-          <h1 class="logo"><a href="index.php">Viufinder</a></h1>
-          <!-- Uncomment below if you prefer to use an image logo -->
-          <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-    
-          <nav id="navbar" class="navbar">
-            <ul>
-              <li><a class="nav-link scrollto" href="index.html">Home</a></li>
-              <li><a class="nav-link scrollto active" href="profil_sediajasa.html">Profile</a></li>
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-          </nav>
-    
-        </div>
-      </header>
+    <!-- ======= Header ======= -->
+  <header id="header" class="sticky-top d-flex align-items-center bg-black">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="index.php">Viufinder</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto" href="profil_sediajasa.php">Dashboard</a></li>
+          <li>
+            <div class="dropdown">
+              <!-- <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown button
+              </button> -->
+              <a class="getstarted scrollto dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <?php echo $_SESSION['email']; ?>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="profil_carijasa.php">Profil</a>
+                <a class="dropdown-item" href="logout.php">Keluar</a>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+
+    </div>
+  </header>
+  <!-- End Header -->
 <div class="container"> 
 <div class="col-md-12">  
     <div class="col-md-4">      
@@ -42,9 +91,8 @@
             <div class="profile-userpic">
                 <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-responsive" alt=""> </div>
             <div class="profile-usertitle">
-                <div class="profile-usertitle-name"> Marcus Doe </div>
-                <!-- for penyedia jasa use below -->
-                <!-- <div class="profile-usertitle-job"> Developer </div> -->
+                <div class="profile-usertitle-name"> <?php echo $pjasadata['pjasa_nama']?> </div>
+                <h4><?php echo $pjasadata['pjasa_alamat'] ?></h4>
             </div>
             <div class="profile-usermenu">
                 <ul class="nav">
@@ -54,7 +102,7 @@
                     </li>
                     <li>
                         <a href="#jadwalpesanan">
-                            <i class="icon-settings"></i> Jadwal Pesanan </a>
+                            <i class="icon-settings"></i> Pesanan </a>
                     </li>
                     <li>
                         <a href="#ubahkatasandi">
@@ -146,52 +194,208 @@
             </div>
             <div class="portlet-body">
                 <div class="d-flex">
-                    <div class="col-md-10">
+                    <div class="col">
                         <div class="rounded">
                             <div class="table-responsive table-borderless">
                                 <table class="table">
-                                    <thead>
+                                    <thead class="table-dark">
                                         <tr>
-                                            <th class="carijasa">Pencari Jasa</th>
-                                            <th class="pesanan">Pesanan</th>
-                                            <th class="status">status</th>
-                                            <th class="jadwal">Jadwal</th>
-                                            <th class="konfirmasi">Konfirmasi</th>
+                                            <th><h4><b>Pencari Jasa</b></h4></th>
+                                            <th><h4><b>Pesanan</b></h4></th>
+                                            <th><h4><b>Status</b></h4></th>
+                                            <th><h4><b>Jadwal</b></h4></th>
+                                            <th><h4><b>Aksi</b></h4></th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-body">
-                                        <tr class="cell-1">
-                                            <td>Ari Laksmana</td>
-                                            <td>Portrait Photography</td>
-                                            <td><span class="badge badge">Pending</span></td>
-                                            <td> 
-                                                <div class="jadwalTgl">4 Juli 2021</div>
-                                                <div class="jadwalWaktu">12:00-14:00</div>
+                                        <tr class="table-light">
+                                            <td colspan="5">
+                                                <b>Pesanan Dipesan</b>
                                             </td>
-                                            <td><button type="button" class="btn btn-success">Yes</button> <button type="button" class="btn btn-danger">No</button></td>
-                                            
                                         </tr>
-                                        <tr class="cell-1">
-                                            <td>Indah</td>
-                                            <td>Edit foto</td>
-                                            <td><span class="badge badge-info">Proses</span></td>
-                                            <td> 
-                                                <div class="jadwalTgl">5 Juli 2021</div>
-                                                <div class="jadwalWaktu">21:00-22:00</div>
-                                            </td>
-                                            <td><button type="submit" class="btn btn-success" style="width: 100%;">Selesai</button></td>
 
-                                        </tr>
-                                        <tr class="cell-1">
-                                            <td>Bayu Ari</td>
-                                            <td>Food Photography</td>
-                                            <td><span class="badge badge-success">Selesai</span></td>
-                                            <td> 
-                                                <div class="jadwalTgl">2 Juli 2021</div>
-                                                <div class="jadwalWaktu">08:00-09:00</div>
-                                            </td>
+                                        <?php
+                                            $query = "SELECT pc.pcr_nama, pm.* FROM pemesanan_jasa pm
+                                                        INNER JOIN pencari_jasa pc ON pc.pcr_id = pm.pcr_id
+                                                        WHERE pm.pjasa_id = '$id' AND pm.pmsn_status = 'Dipesan'";
+                                            $result = mysqli_query($conn, $query);
                                             
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                            <td>".$row['pcr_nama']."</td>
+                                                            <td>".$row['pmsn_jenis']."</td>
+                                                            <td>".$row['pmsn_status']."</td>
+                                                            <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                                            <td>
+                                                                <a href='dashboard_sediajasa.php?pid=".$row['pmsn_id']."&action=terima' class='btn btn-primary btn-sm'>Terima</a>
+                                                                <a href='dashboard_sediajasa.php?pid=".$row['pmsn_id']."&action=tolak' class='btn btn-danger btn-sm'>tolak</a>
+                                                            </td>
+                                                        </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                            }
+                                        ?>
+
+                                        <tr class="table-secondary">
+                                            <td colspan="5">
+                                                <b>Pesanan Dikonfirmasi</b>
+                                            </td>
                                         </tr>
+                                        <?php
+                                            $query = "SELECT pc.pcr_nama, pm.* FROM pemesanan_jasa pm
+                                                        INNER JOIN pencari_jasa pc ON pc.pcr_id = pm.pcr_id
+                                                        WHERE pm.pjasa_id = '$id' AND pm.pmsn_status = 'Dikonfirmasi'";
+                                            $result = mysqli_query($conn, $query);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                            <td>".$row['pcr_nama']."</td>
+                                                            <td>".$row['pmsn_jenis']."</td>
+                                                            <td>".$row['pmsn_status']."</td>
+                                                            <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                                            <td>
+                                                            <a href='dashboard_sediajasa.php?pid=".$row['pmsn_id']."&action=batal' class='btn btn-primary btn-sm'>Batalkan</a>
+                                                            </td>
+                                                        </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                            }
+                                        ?>
+                                        <tr class="table-primary">
+                                            <td colspan="5">
+                                                <b>Pesanan Dibayar</b>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            $query = "SELECT pc.pcr_nama, pm.* FROM pemesanan_jasa pm
+                                                        INNER JOIN pencari_jasa pc ON pc.pcr_id = pm.pcr_id
+                                                        WHERE pm.pjasa_id = '$id' AND pm.pmsn_status = 'Dibayar'";
+                                            $result = mysqli_query($conn, $query);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                            <td>".$row['pcr_nama']."</td>
+                                                            <td>".$row['pmsn_jenis']."</td>
+                                                            <td>".$row['pmsn_status']."</td>
+                                                            <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                                            <td>
+                                                            <a href='dashboard_sediajasa.php?pid=".$row['pmsn_id']."&action=kerja' class='btn btn-info btn-sm'>Kerjakan</a>
+                                                            </td>
+                                                        </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                            }
+                                        ?>
+                                        <tr class="table-info">
+                                            <td colspan="5">
+                                                <b>Pesanan Dikerjakan</b>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            $query = "SELECT pc.pcr_nama, pm.* FROM pemesanan_jasa pm
+                                                        INNER JOIN pencari_jasa pc ON pc.pcr_id = pm.pcr_id
+                                                        WHERE pm.pjasa_id = '$id' AND pm.pmsn_status = 'Dikerjakan'";
+                                            $result = mysqli_query($conn, $query);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                            <td>".$row['pcr_nama']."</td>
+                                                            <td>".$row['pmsn_jenis']."</td>
+                                                            <td>".$row['pmsn_status']."</td>
+                                                            <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                                            <td>
+                                                            </td>
+                                                        </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                            }
+                                        ?>
+                                        <tr class="table-success">
+                                            <td colspan="5">
+                                                <b>Pesanan Selesai</b>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            $query = "SELECT pc.pcr_nama, pm.* FROM pemesanan_jasa pm
+                                                        INNER JOIN pencari_jasa pc ON pc.pcr_id = pm.pcr_id
+                                                        WHERE pm.pjasa_id = '$id' AND pm.pmsn_status = 'Selesai'";
+                                            $result = mysqli_query($conn, $query);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                            <td>".$row['pcr_nama']."</td>
+                                                            <td>".$row['pmsn_jenis']."</td>
+                                                            <td>".$row['pmsn_status']."</td>
+                                                            <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                                            <td>
+                                                            </td>
+                                                        </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                            }
+                                        ?>
+                                        <tr class="table-warning">
+                                            <td colspan="5">
+                                                <b>Pesanan Dibatalkan</b>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            $query = "SELECT pc.pcr_nama, pm.* FROM pemesanan_jasa pm
+                                                        INNER JOIN pencari_jasa pc ON pc.pcr_id = pm.pcr_id
+                                                        WHERE pm.pjasa_id = '$id' AND pm.pmsn_status = 'Dibatalkan'";
+                                            $result = mysqli_query($conn, $query);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                            <td>".$row['pcr_nama']."</td>
+                                                            <td>".$row['pmsn_jenis']."</td>
+                                                            <td>".$row['pmsn_status']."</td>
+                                                            <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                                            <td>
+                                                            </td>
+                                                        </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                            }
+                                        ?>
+                                        <tr class="table-danger">
+                                            <td colspan="5">
+                                                <b>Pesanan Ditolak</b>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            $query = "SELECT pc.pcr_nama, pm.* FROM pemesanan_jasa pm
+                                                        INNER JOIN pencari_jasa pc ON pc.pcr_id = pm.pcr_id
+                                                        WHERE pm.pjasa_id = '$id' AND pm.pmsn_status = 'Ditolak'";
+                                            $result = mysqli_query($conn, $query);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                            <td>".$row['pcr_nama']."</td>
+                                                            <td>".$row['pmsn_jenis']."</td>
+                                                            <td>".$row['pmsn_status']."</td>
+                                                            <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
+                                                            <td>
+                                                            </td>
+                                                        </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>

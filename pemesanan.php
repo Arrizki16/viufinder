@@ -21,10 +21,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $place = $_POST['tempat'];
     $note = $_POST['catatan'];
     $payment = $_POST['metodebayar'];
+    $type = $_POST['jenisjasa'];
 
-    $query = "INSERT INTO pemesanan_jasa (pcr_id, pjasa_id, pmsn_tanggal, pmsn_waktu_mulai, pmsn_waktu_selesai, pmsn_lokasi, pmsn_catatan, mtd_id, pmsn_status) 
-                VALUES ($pcrid, $pjasaid, '$date', '$timeStart', '$timeEnd', '$place', '$note', $payment, 'Dipesan')";
+    $query = "INSERT INTO pemesanan_jasa (pcr_id, pjasa_id, pmsn_tanggal, pmsn_waktu_mulai, pmsn_waktu_selesai, pmsn_lokasi, pmsn_catatan, mtd_id, pmsn_status, pmsn_jenis) 
+                VALUES ($pcrid, $pjasaid, '$date', '$timeStart', '$timeEnd', '$place', '$note', $payment, 'Dipesan', '$type')";
     $result = mysqli_query($conn, $query);
+
+    if($result){
+        header("location:index.php");
+    }
 }
 ?>
 <!doctype html>
@@ -256,7 +261,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 <div class="form-group">
                     <label><br>Tanggal</label>
                     <div class="input-group">
-                        <input class="form-control" name="tanggal" type="text" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" required>
+                        <input class="form-control" name="tanggal" type="text" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required>
                     </div>
                 </div>
                 <div class="form-group">

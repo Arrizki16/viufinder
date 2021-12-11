@@ -4,11 +4,9 @@ session_start();
 if (isset($_SESSION['email']) && isset($_SESSION['user_type'])) {
   if($_SESSION['user_type'] == 'pencari_jasa') {
     header('Location: dashboard_carijasa.php');
-  }
-  
-// } else if (isset($_SESSION['email']) && $_SESSION['user_type'] == 'penyedia_jasa') {
-//   header('Location: dashboard_sediajasa.php');
-// } else if (isset($_SESSION['email']) && $_SESSION['user_type'] == 'admin') {
+  } else if (isset($_SESSION['email']) && $_SESSION['user_type'] == 'penyedia_jasa') {
+    header('Location: dashboard_sediajasa.php');
+  }// else if (isset($_SESSION['email']) && $_SESSION['user_type'] == 'admin') {
 //   header('Location: dashboard_admin.php');
 }
 ?>

@@ -203,6 +203,7 @@ CREATE TABLE `pemesanan_jasa` (
     `pmsn_waktu_selesai` time,
     `pmsn_catatan` varchar(1024),
     `pmsn_status` varchar(100),
+    `pmsn_jenis` varchar(100),
     `pmsn_lokasi` varchar(256),
     `pmsn_foto1` mediumblob,
     `pmsn_foto2` mediumblob,

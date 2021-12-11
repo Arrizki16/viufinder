@@ -15,10 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	$stmt = $conn->prepare('INSERT INTO penyedia_jasa (pjasa_nama, pjasa_email, pjasa_password) VALUES (?, ?, ?)');
     $stmt->bind_param('sss', $name, $email, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-	if($result) {
+	if($stmt->execute()) {
 		header('Location: login_sediajasa.php');
 	}
 }
