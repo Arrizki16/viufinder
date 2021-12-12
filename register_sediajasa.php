@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="my-login-page">
 	<!-- ======= Header ======= -->
-	<!-- <header id="header" class="fixed-top d-flex align-items-center ">
+	<header id="header" class="fixed-top d-flex align-items-center ">
 		<div class="container d-flex align-items-center justify-content-between">
 	
 		  <h1 class="logo"><a href="index.php">Viufinder</a></h1>
@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		  </nav>
 	
 		</div>
-	  </header> -->
+	  </header>
 	  <!-- End Header -->
 	
 	  <section class="h-100">
