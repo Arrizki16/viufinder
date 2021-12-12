@@ -198,6 +198,7 @@ CREATE TABLE `pemesanan_jasa` (
     `pcr_id` int(11) NOT NULL,
     `ulsn_id` int,
     `mtd_id` int NOT NULL,
+    `pmsn_harga` decimal(10,2),
     `pmsn_tanggal` date,
     `pmsn_waktu_mulai` time,
     `pmsn_waktu_selesai` time,

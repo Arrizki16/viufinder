@@ -73,10 +73,10 @@ session_start();
             <span class="awal"><a href="index.html">Beranda</a> > <a href="carieditor.html">Cari Fotografer</a></span>
             <span class="desc">Cari Berdasarkan</span>
             <div class="row">
-              <div class="input-field">
+              <div class="col input-field">
                 <span>Nama</span>
-                <div class="mb-3 email">
-                  <input type="text" class="form-control" id="nama" aria-describedby="emailHelp" placeholder="Nama" />
+                <div class="">
+                  <input type="text" class="form-control" id="nama" placeholder="Nama" />
                 </div>
               </div>
               <div class="input-field">
@@ -87,19 +87,6 @@ session_start();
                     <option>Jakarta</option>
                     <option>Surabaya</option>
                     <option>Malang</option>
-                  </select>
-                </div>
-              </div>
-              <div class="input-field">
-                <span>Harga</span>
-                <div class="input-select">
-                  <select id="harga" data-trigger="" name="choices-single-defaul">
-                    <option placeholder="" value="">Semua harga</option>
-                    <option>10000 - 50000/jam</option>
-                    <option>51000 - 100000/jam</option>
-                    <option>101000 - 250000/jam</option>
-                    <option>251000 - 500000/jam</option>
-                    <option>500000 - 1000000/jam</option>
                   </select>
                 </div>
               </div>
@@ -165,8 +152,6 @@ session_start();
                 $category = (isset($_GET['kategori'])) ? $_GET['kategori'] : '';
                 $ratingMin = (isset($_GET['minrating'])) ? $_GET['minrating'] : 0;
                 $ratingMax = (isset($_GET['maxrating'])) ? $_GET['maxrating'] : 5;
-                $priceMin = (isset($_GET['minharga'])) ? $_GET['minharga'] : 0;
-                $priceMax = (isset($_GET['maxharga'])) ? $_GET['maxharga'] : 1000000;
                 $location = (isset($_GET['lokasi'])) ? $_GET['lokasi'] : '';
                 echo $name;
                 
@@ -179,7 +164,6 @@ session_start();
                           WHERE pjasa_nama LIKE '%$name%'
                           AND pjasa_alamat LIKE '%$location%'
                           AND edtr_rating > $ratingMin AND edtr_rating <= $ratingMax
-                          AND edtr_tarif > $priceMin AND edtr_tarif <= $priceMax
                           AND ktg_kategori LIKE '%$category%'";
                 $result = mysqli_query($conn, $query);
 
@@ -221,12 +205,6 @@ session_start();
                               </div>
                               <?php                             
                             }
-                          ?>
-                        </p>
-                        <p>
-                          <?php
-                            $tarif = $row['edtr_tarif'];
-                            echo "Rp. ".$tarif."/jam";
                           ?>
                         </p>
                         <a href="profil_sediajasa.php?id=<?php echo $id; ?>" class="btn btn-primary text-white">Kunjungi Profil</a>

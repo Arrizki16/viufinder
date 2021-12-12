@@ -36,10 +36,9 @@ function search() {
     let name = getSearchString("nama", false).slice(1);
     let location = getSearchString("lokasi", false);
     let category = getSearchString("kategori", false);
-    let price = getSearchString("harga", true);
     let rating = getSearchString("rating", true);
 
-    searchUrl += name + location + category + price + rating;
+    searchUrl += name + location + category + rating;
     console.log(searchUrl);
     window.location.replace(searchUrl);
 };
