@@ -56,26 +56,12 @@ CREATE TABLE `admin_web` (
     PRIMARY KEY (`adm_id`)
 );
 
-CREATE TABLE `verifikasi_pendaftar` (
-    `adm_id` int(11) NOT NULL AUTO_INCREMENT,
-    `vpend_id` int NOT NULL,
-    `vpend_nama` varchar(100),
-    `vpend_kontak` varchar(15),
-    `vpend_portofolio` mediumblob,
-    `vpend_email` varchar(200),
-    `vpend_password` varchar(100),
-    PRIMARY KEY (`vpend_id`, `adm_id`),
-    FOREIGN KEY (`adm_id`) REFERENCES `admin_web`(`adm_id`)
-);
-
 CREATE TABLE `terverifikasi` (
     `adm_id` int(11) NOT NULL,
-    `vpend_id` int NOT NULL,
     `pjasa_id` int(11) NOT NULL,
-    PRIMARY KEY (`vpend_id`, `adm_id`, `pjasa_id`),
+    PRIMARY KEY (`adm_id`, `pjasa_id`),
     FOREIGN KEY (`adm_id`) REFERENCES `admin_web`(`adm_id`),
-    FOREIGN KEY (`pjasa_id`) REFERENCES `penyedia_jasa`(`pjasa_id`),
-    FOREIGN KEY (`vpend_id`) REFERENCES `verifikasi_pendaftar`(`vpend_id`)
+    FOREIGN KEY (`pjasa_id`) REFERENCES `penyedia_jasa`(`pjasa_id`)
 );
 
 CREATE TABLE `penyewaan_alat` (
