@@ -153,13 +153,15 @@ session_start();
                 $ratingMin = (isset($_GET['minrating'])) ? $_GET['minrating'] : 0;
                 $ratingMax = (isset($_GET['maxrating'])) ? $_GET['maxrating'] : 5;
                 $location = (isset($_GET['lokasi'])) ? $_GET['lokasi'] : '';
+                $nonaktif = "SELECT pjasa_id FROM nonaktif";
                 echo $name;
                 
                 $fotografer = "SELECT p.pjasa_id, p.pjasa_nama, p.pjasa_alamat, p.pjasa_foto, f.*, k.* FROM penyedia_jasa AS p
                                 INNER JOIN penyedia_jasa_rangkap AS r ON p.pjasa_id = r.pjasa_id
                                 INNER JOIN fotografer as f ON r.ftg_id = f.ftg_id
                                 INNER JOIN fotografer_kategori fk ON fk.ftg_id = f.ftg_id
-                                INNER JOIN kategori_jasa k ON k.ktg_id = fk.ktg_id";
+                                INNER JOIN kategori_jasa k ON k.ktg_id = fk.ktg_id
+                                WHERE p.pjasa_id NOT IN ($nonaktif) n";
                 $query = "SELECT DISTINCT(pjasa_id), pjasa_nama, pjasa_alamat, ftg_id, ftg_rating, ftg_tarif FROM ($fotografer) ftg
                           WHERE pjasa_nama LIKE '%$name%'
                           AND pjasa_alamat LIKE '%$location%'

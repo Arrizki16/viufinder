@@ -12,12 +12,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+	$address = $_POST['address'];
+	$isFtg = (isset($_POST['checkftg'])) ? 1 : 0;
+	$isEdtr = (isset($_POST['checkedtr'])) ? 1 : 0;
+	$isPalat = (isset($_POST['checkpalat'])) ? 1 : 0;
 
-	$stmt = $conn->prepare('INSERT INTO penyedia_jasa (pjasa_nama, pjasa_email, pjasa_password) VALUES (?, ?, ?)');
-    $stmt->bind_param('sss', $name, $email, $password);
+	$ftgq = ($isFtg) ? "INSERT INTO `fotografer` (`ftg_rating`) VALUES (`5`);" : "";
+	$edtrq = ($isEdtr) ? "INSERT INTO `editor` (`edtr_rating`) VALUES (`5`);" : "";
+	$palatq = ($isPalat) ? "INSERT INTO `penyewaan_alat` (`palat_rating`) VALUES (`5`);" : "";
 
-	if($stmt->execute()) {
+	$ftgid = ($isFtg) ? "(SELECT MAX(`ftg_id`) FROM `fotografer`)" : "null";
+	$edtrid = ($isEdtr) ? "(SELECT MAX(`edtr_id`) FROM `editor`)" : "null";
+	$palatid = ($isPalat) ? "(SELECT MAX(`palat_id`) FROM `penyewaan_alat`)" : "null";
+
+	$pjasaid = "(SELECT MAX(`pjasa_id`) FROM `penyedia_jasa`)";
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+	echo $name;
+	// echo $email;	
+	$query = "INSERT INTO `penyedia_jasa` (`pjasa_nama`, `pjasa_email`, `pjasa_password`, `pjasa_alamat`) VALUES ('$name', '$email', '$password', '$address');
+				$ftgq $edtrq $palatq
+				INSERT INTO `penyedia_jasa_rangkap` (`pjasa_id`, `ftg_id`, `edtr_id`, `palat_id`) VALUES ($pjasaid, $ftgid, $edtrid, $palatid);";
+	
+	if($stmt = mysqli_multi_query($conn, $query)) { 
 		header('Location: login_sediajasa.php');
+	} else {
+		$error = $conn->errno . ' ' . $conn->error;
+		echo $error; // 1054 Unknown column 'foo' in 'field list'
 	}
 }
 ?>
@@ -42,15 +63,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<!-- Template Main CSS File -->
 	<link rel="stylesheet" type="text/css" href="assets/css/login.css">
 	<link href="assets/css/style.css" rel="stylesheet">
+	<style>
+		section { overflow-y: scroll !important; }
+		/* body, html { position: absolute !important; } */
+	</style>
 </head>
 <body class="my-login-page">
 	<!-- ======= Header ======= -->
-	<header id="header" class="fixed-top d-flex align-items-center ">
+	<!-- <header id="header" class="fixed-top d-flex align-items-center ">
 		<div class="container d-flex align-items-center justify-content-between">
 	
 		  <h1 class="logo"><a href="index.php">Viufinder</a></h1>
-		  <!-- Uncomment below if you prefer to use an image logo -->
-		  <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+		  
 	
 		  <nav id="navbar" class="navbar">
 			<ul>
@@ -68,9 +92,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		  </nav>
 	
 		</div>
-	  </header>
+	  </header> -->
 	  <!-- End Header -->
-	<section class="h-100">
+	
+	  <section class="h-100">
 		<div class="container h-100">
 			<div class="row justify-content-md-center h-100">
 				<div class="card-wrapper">
@@ -104,7 +129,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 										Password is required
 									</div>
 								</div>
+								<div class="form-group">
+									<label for="address">Address</label>
+									<input id="address" type="text" class="form-control" placeholder="type your address" name="address" required data-eye>
+									<div class="invalid-feedback">
+										Address is required
+									</div>
+								</div>
 
+								<label>Jenis Jasa</label>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value="1" id="checkftg" name="checkftg" checked>
+									<label class="form-check-label" for="checkftg">
+										Fotografer
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value="1" id="checkedtr" name="checkedtr">
+									<label class="form-check-label" for="checkedtr">
+										Editor
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value="1" id="checkpalat" name="checkpalat">
+									<label class="form-check-label" for="checkpalat">
+										Penyewaan Alat
+									</label>
+								</div>
+								<p><br></p>
 								<div class="form-group">
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">

@@ -106,6 +106,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 								</div>
 
 								<div class="form-group">
+									<label for="address">Address</label>
+									<input id="address" type="address" class="form-control" placeholder="type your address" name="text" required data-eye>
+									<div class="invalid-feedback">
+										Address is required
+									</div>
+								</div>
+
+								
+
+								<div class="form-group">
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">
 										<label for="agree" class="custom-control-label">I agree to the <a href="#">Terms and Conditions</a></label>

@@ -64,6 +64,14 @@ CREATE TABLE `terverifikasi` (
     FOREIGN KEY (`pjasa_id`) REFERENCES `penyedia_jasa`(`pjasa_id`)
 );
 
+CREATE TABLE `nonaktif` (
+    `adm_id` int(11) NOT NULL,
+    `pjasa_id` int(11) NOT NULL,
+    PRIMARY KEY (`adm_id`, `pjasa_id`),
+    FOREIGN KEY (`adm_id`) REFERENCES `admin_web`(`adm_id`),
+    FOREIGN KEY (`pjasa_id`) REFERENCES `penyedia_jasa`(`pjasa_id`)
+);
+
 CREATE TABLE `penyewaan_alat` (
     `palat_id` int NOT NULL AUTO_INCREMENT,
     `palat_rating` int,

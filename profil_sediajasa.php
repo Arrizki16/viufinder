@@ -2,9 +2,14 @@
 session_start();
 if(!isset($_SESSION['email'])){
   header("location: index.php");
-}
+}                                                 
 $sediajasaid = (isset($_GET['id']) ? $_GET['id'] : null);
 $user_type = (isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null);
+
+if(is_null($user_type)){
+  header("location: index.php");
+}
+
 if(is_null($sediajasaid)){
   header('Location: index.php');
 } else {
@@ -117,7 +122,8 @@ if(is_null($sediajasaid)){
               } else if ($user_type == 'pencari_jasa'){
                 echo '<a class="btn btn-primary" href="pemesanan.php?id='.$sediajasadata['pjasa_id'].'" role="button">Pesan Jasa</a>';
               } else if ($user_type == 'admin'){
-                echo '<a class="btn btn-primary" href="dashboard_sediajasa.php" role="button">Ubah Data</a>';
+                echo '<a class="btn btn-primary" href="dashboard_admin.php?pid='.$sediajasaid.'&action=verifikasi" role="button">Verifikasi</a>';
+                echo '<a class="btn btn-danger" href="dashboard_admin.php?pid='.$sediajasaid.'&action=nonaktif" role="button">Nonaktifkan</a>';
               }
             ?>
             

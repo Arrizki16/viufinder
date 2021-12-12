@@ -12,8 +12,14 @@ $id = $admdata['adm_id'];
 
 if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'verifikasi'){
     $pid = $_GET['pid'];
-    $query = "INSERT INTO `terverifikasi` (adm_id, pjasa_id) VALUES ('$id' , '$pid');";
+    $query = "INSERT INTO `terverifikasi` (adm_id, pjasa_id) VALUES ($id , $pid);";
     mysqli_query($conn, $query);
+}
+if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif'){
+    $pid = $_GET['pid'];
+    $queryn = "INSERT INTO nonaktif (adm_id, pjasa_id) VALUES ($id , $pid);
+                DELETE FROM terverifikasi WHERE pjasa_id = $pid;";
+    mysqli_multi_query($conn, $queryn);
 }
 ?>
 <!DOCTYPE html>
@@ -37,7 +43,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'verifika
             <div style="color: white;
                 padding: 15px 50px 5px 50px;
                 float: right;
-                font-size: 16px;"> <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
+                font-size: 16px;"> <a href="logout.php" class="btn btn-danger square-btn-adjust">Logout</a>
             </div>
         </nav>   
         <!-- /. NAV TOP  -->
@@ -137,7 +143,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'verifika
                                     <th><h4><b>ID</b></h4></th>
                                     <th><h4><b>Nama</b></h4></th>
                                     <th><h4><b>Alamat</b></h4></th>
-                                    <th><h4><b>Verifikator</b></h4></th>
+                                    <th><h4><b>Admin</b></h4></th>
                                     <th><h4><b>Aksi</b></h4></th>
                                 </tr>
                             </thead>
@@ -151,10 +157,14 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'verifika
                                     $terverifikasi = "SELECT pj.*, t.adm_id FROM penyedia_jasa pj 
                                                         INNER JOIN terverifikasi t ON pj.pjasa_id = t.pjasa_id 
                                                         INNER JOIN admin_web a ON a.adm_id = t.adm_id";
+                                    $nonaktif = "SELECT pj.*, t.adm_id FROM penyedia_jasa pj 
+                                                    INNER JOIN nonaktif t ON pj.pjasa_id = t.pjasa_id 
+                                                    INNER JOIN admin_web a ON a.adm_id = t.adm_id;";
                                     $query = "SELECT * FROM penyedia_jasa pj
-                                                WHERE pj.pjasa_id NOT IN (SELECT pjasa_id FROM ($terverifikasi) t)";
+                                                WHERE pj.pjasa_id NOT IN (SELECT pjasa_id FROM ($terverifikasi) t)
+                                                AND pj.pjasa_id NOT IN (SELECT pjasa_id FROM ($nonaktif) n)";
                                     $result = mysqli_query($conn, $query);
-                                    if ($result->num_rows > 0) {
+                                    if ($result     ) {
                                         while($row = $result->fetch_assoc()) {
                                             echo "<tr>
                                                     <td>".$row['pjasa_id']."</td>
@@ -162,8 +172,9 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'verifika
                                                     <td>".$row['pjasa_alamat']."</td>
                                                     <td>Kosong</td>
                                                     <td>
+                                                        <a href='dashboard_admin.php?pid=".$row['pjasa_id']."&action=nonaktif' class='btn btn-danger'>Nonaktifkan</a>
                                                         <a href='dashboard_admin.php?pid=".$row['pjasa_id']."&action=verifikasi' class='btn btn-success'>Verifikasi</a>
-                                                        <a href='profil_sediajasa.php?pid=".$row['pjasa_id']."' class='btn btn-primary'>Lihat Profil</a>
+                                                        <a href='profil_sediajasa.php?id=".$row['pjasa_id']."' class='btn btn-primary'>Lihat Profil</a>
                                                     </td>
                                                 </tr>";
                                         }
@@ -183,19 +194,43 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'verifika
                                     $result = mysqli_query($conn, $terverifikasi);
                                     if ($result->num_rows > 0) {
                                         while($row = $result->fetch_assoc()) {
-                                            while($row = $result->fetch_assoc()) {
-                                                echo "<tr>
-                                                        <td>".$row['pjasa_id']."</td>
-                                                        <td>".$row['pjasa_nama']."</td>
-                                                        <td>".$row['pjasa_alamat']."</td>
-                                                        <td>".$row['adm_nama']."</td>
-                                                        <td>
-                                                        </td>
-                                                    </tr>";
-                                            }
+                                            echo "<tr>
+                                                    <td>".$row['pjasa_id']."</td>
+                                                    <td>".$row['pjasa_nama']."</td>
+                                                    <td>".$row['pjasa_alamat']."</td>
+                                                    <td>".$row['adm_nama']."</td>
+                                                    <td>
+                                                    <a href='dashboard_admin.php?pid=".$row['pjasa_id']."&action=nonaktif' class='btn btn-danger'>Nonaktifkan</a>
+                                                    </td>
+                                                </tr>";
                                         }
                                     } else {
                                         echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                    }
+                                ?>
+                                <tr class="table-light" style="background: cyan;">
+                                    <td colspan="5">
+                                        <b>Penyedia Jasa Nonaktif</b>
+                                    </td>
+                                </tr>
+                                <?php
+                                    $nonaktif = "SELECT pj.*, t.adm_id FROM penyedia_jasa pj 
+                                                        INNER JOIN nonaktif t ON pj.pjasa_id = t.pjasa_id 
+                                                        INNER JOIN admin_web a ON a.adm_id = t.adm_id;";
+                                    $result = mysqli_query($conn, $nonaktif);
+                                    if ($result->num_rows > 0) {
+                                        while($row = $result->fetch_assoc()) {
+                                            echo "<tr>
+                                                    <td>".$row['pjasa_id']."</td>
+                                                    <td>".$row['pjasa_nama']."</td>
+                                                    <td>".$row['pjasa_alamat']."</td>
+                                                    <td>".$row['adm_id']."</td>
+                                                    <td>
+                                                    </td>
+                                                </tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan="."5".">Tidak ada.</td></tr>";
                                     }
                                 ?>
                             </tbody>
