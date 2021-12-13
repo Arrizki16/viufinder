@@ -3,7 +3,7 @@ session_start();
 if(!isset($_SESSION['email']) || (isset($_SESSION['user_type']) && $_SESSION['user_type'] != 'admin')){
   header("location:index.php");
 }
-include_once("database/db_connection.php");
+include("database/db_connection.php");
 $email = $_SESSION['email'];
  
 $query = "SELECT * FROM admin_web WHERE adm_email='$email'";
@@ -12,14 +12,18 @@ $id = $admdata['adm_id'];
 
 if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'verifikasi'){
     $pid = $_GET['pid'];
-    $query = "INSERT INTO `terverifikasi` (adm_id, pjasa_id) VALUES ($id , $pid);";
+    $query = "INSERT INTO `terverifikasi` (adm_id, pjasa_id) VALUES ($id , $pid)";
     mysqli_query($conn, $query);
 }
 if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif'){
     $pid = $_GET['pid'];
-    $queryn = "INSERT INTO nonaktif (adm_id, pjasa_id) VALUES ($id , $pid);
-                DELETE FROM terverifikasi WHERE pjasa_id = $pid;";
-    mysqli_multi_query($conn, $queryn);
+    $query1 = "INSERT INTO nonaktif (adm_id, pjasa_id) VALUES ($id , $pid)";
+    mysqli_query($conn, $query1);
+    $query2 = "DELETE FROM terverifikasi WHERE pjasa_id = $pid";
+    mysqli_query($conn, $query2);
+}
+if(isset($_GET['action'])) {
+    header("location:dashboard_admin.php");
 }
 ?>
 <!DOCTYPE html>
@@ -29,7 +33,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Admin Viufinder</title>
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
-    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/389e9b29e9.js" crossorigin="anonymous"></script>
     <link href="assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
     <link href="assets/css/custom.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
@@ -67,7 +71,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif
                 <div class="row">
                     <div class="col-md-12">
                      <h2>Admin Dashboard</h2>   
-                        <h5>Selamat datang, <?php echo $admdata['adm_nama'] ?></h5>
+                        <h3>Selamat datang, <b><?php echo $admdata['adm_nama'] ?></b></h3>
                     </div>
                 </div>              
                  <!-- /. ROW  -->
@@ -75,14 +79,18 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif
                     <div class="col-md-3 col-sm-6 col-xs-6">           
                         <div class="panel panel-back noti-box">
                             <span class="icon-box bg-color-red set-icon">
-                                <i class="fa fa-envelope-o"></i>
+                                <i class="fas fa-user"></i>
                             </span>
                             <div class="text-box">
                                 <p class="main-text"><?php
                                     $query = "SELECT COUNT(*) FROM pencari_jasa";
-                                    $result = mysqli_query($conn, $query);
-                                    $row = mysqli_fetch_row($result);
-                                    echo $row[0];
+                                    if( $result = mysqli_query($conn, $query) ) {
+                                        $row = mysqli_fetch_assoc($result);
+                                        echo $row['COUNT(*)'];
+                                    } else {
+                                        $error = $conn->errno . ' ' . $conn->error;
+                                        echo $error;
+                                    }
                                 ?></p>
                                 <p class="text-muted">Pencari Jasa</p>
                             </div>
@@ -91,7 +99,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif
                     <div class="col-md-3 col-sm-6 col-xs-6">           
                         <div class="panel panel-back noti-box">
                             <span class="icon-box bg-color-green set-icon">
-                                <i class="fa fa-bars"></i>
+                                <i class="fas fa-portrait"></i>
                             </span>
                             <div class="text-box" >
                             <p class="main-text"><?php
@@ -107,18 +115,24 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif
                     <div class="col-md-3 col-sm-6 col-xs-6">           
                         <div class="panel panel-back noti-box">
                             <span class="icon-box bg-color-blue set-icon">
-                                <i class="fa fa-bell-o"></i>
+                                <i class="fa fa-user-alt-slash"></i>
                             </span>
                             <div class="text-box" >
-                                <p class="main-text">240 New</p>
-                                <p class="text-muted">Notifications</p>
+                                <p class="main-text"><?php
+                                    $query = "SELECT COUNT(*) FROM penyedia_jasa
+                                                WHERE pjasa_id NOT IN (SELECT pjasa_id FROM terverifikasi);";
+                                    $result = mysqli_query($conn, $query);
+                                    $row = mysqli_fetch_row($result);
+                                    echo $row[0];
+                                ?></p>
+                                <p class="text-muted">Belum Terverifikasi</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-6">           
                         <div class="panel panel-back noti-box">
                             <span class="icon-box bg-color-brown set-icon">
-                                <i class="fa fa-rocket"></i>
+                                <i class="fa fa-folder"></i>
                             </span>
                             <div class="text-box" >
                                 <p class="main-text"><?php
@@ -154,17 +168,13 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif
                                     </td>
                                 </tr>
                                 <?php
-                                    $terverifikasi = "SELECT pj.*, t.adm_id FROM penyedia_jasa pj 
-                                                        INNER JOIN terverifikasi t ON pj.pjasa_id = t.pjasa_id 
-                                                        INNER JOIN admin_web a ON a.adm_id = t.adm_id";
-                                    $nonaktif = "SELECT pj.*, t.adm_id FROM penyedia_jasa pj 
-                                                    INNER JOIN nonaktif t ON pj.pjasa_id = t.pjasa_id 
-                                                    INNER JOIN admin_web a ON a.adm_id = t.adm_id;";
+                                    $terverifikasi = "SELECT pjasa_id FROM terverifikasi";
+                                    $nonaktif = "SELECT pjasa_id FROM nonaktif";
                                     $query = "SELECT * FROM penyedia_jasa pj
                                                 WHERE pj.pjasa_id NOT IN (SELECT pjasa_id FROM ($terverifikasi) t)
                                                 AND pj.pjasa_id NOT IN (SELECT pjasa_id FROM ($nonaktif) n)";
                                     $result = mysqli_query($conn, $query);
-                                    if ($result     ) {
+                                    if ($result->num_rows > 0) {
                                         while($row = $result->fetch_assoc()) {
                                             echo "<tr>
                                                     <td>".$row['pjasa_id']."</td>
@@ -205,7 +215,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'nonaktif
                                                 </tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan="."5".">Tidak ada pesanan.</td></tr>";
+                                        echo "<tr><td colspan="."5".">Tidak ada.</td></tr>";
                                     }
                                 ?>
                                 <tr class="table-light" style="background: cyan;">

@@ -60,7 +60,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
 
       <h1 class="logo"><a href="dashboard_carijasa.php">Viufinder</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar">
         <ul>
@@ -157,7 +157,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                                           <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
                                           <td>
                                             <button id='modalInput' type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#bayarModal' 
-                                            data-bs-mtdnama='".$mtddata['mtd_nama']."' data-bs-mtdnotf='".$mtddata['mtd_nomertf']."' data-bs-pid='".$row['pmsn_id']."'>
+                                            data-bs-mtdharga='".$row['pmsn_harga']."' data-bs-mtdnama='".$mtddata['mtd_nama']."' data-bs-mtdnotf='".$mtddata['mtd_nomertf']."' data-bs-pid='".$row['pmsn_id']."'>
                                               Bayar
                                             </button>
                                           </td>
@@ -345,7 +345,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                 <li>tidak ada pembatalan pemesanan</li>
               </ul>
               <div class="btn-wrap">
-                <a href="carieditor.html" class="btn-buy">Pesan</a>
+                <a href="carieditor.php" class="btn-buy">Pesan</a>
               </div>
             </div>
           </div>
@@ -362,7 +362,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                 <li>tidak ada pembatalan pemesanan</li>
               </ul>
               <div class="btn-wrap">
-                <a href="carialat.html" class="btn-buy">Pesan</a>
+                <a href="carialat.php" class="btn-buy">Pesan</a>
               </div>
             </div>
           </div>
@@ -446,8 +446,10 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
           <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
         </div>
         <div class='modal-body'>
-          <p>Kamu belum melakukan pembayaran pesanan ini. Untuk membayar silahkan transfer ke nomor berikut:</p>
+          <p>Kamu belum melakukan pembayaran pesanan ini. Lakukan pembayaran sejumlah:</p>
           <h2 class="text-center"></h2>
+          <p>menuju:</p>
+          <h3 class="text-center"></h3>
           <h4 class="text-center"></h4>
           <p>Setelah melakukan pembayaran, silakan melakukan konfirmasi pembayaran untuk melanjutkan pesanan.</p>
         </div>
@@ -474,13 +476,16 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
       var button = event.relatedTarget;
       var mtdnama = button.getAttribute('data-bs-mtdnama');
       var mtdnotf = button.getAttribute('data-bs-mtdnotf');
+      var mtdharga = button.getAttribute('data-bs-mtdharga');
       var pid = button.getAttribute('data-bs-pid');
 
-      var notf = modal.querySelector('h2');
+      var harga = modal.querySelector('h2');
+      var notf = modal.querySelector('h3');
       var nama = modal.querySelector('h4');
       var konfirmbtn = modal.querySelector('.btn-primary');
       var href = "dashboard_carijasa.php?pid=" + pid + "&action=bayar";
 
+      harga.textContent = mtdharga;
       notf.textContent = mtdnotf;
       nama.textContent = mtdnama;
       konfirmbtn.setAttribute('href', href);

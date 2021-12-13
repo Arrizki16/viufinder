@@ -50,7 +50,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['user_type'])) {
 
       <h1 class="logo"><a href="index.php">Viufinder</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar">
         <ul>
@@ -277,7 +277,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['user_type'])) {
                 <li>tidak ada pembatalan pemesanan</li>
               </ul>
               <div class="btn-wrap">
-                <a href="carieditor.html" class="btn-buy">Pesan</a>
+                <a href="carieditor.php" class="btn-buy">Pesan</a>
               </div>
             </div>
           </div>
@@ -294,7 +294,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['user_type'])) {
                 <li>tidak ada pembatalan pemesanan</li>
               </ul>
               <div class="btn-wrap">
-                <a href="carialat.html" class="btn-buy">Pesan</a>
+                <a href="carialat.php" class="btn-buy">Pesan</a>
               </div>
             </div>
           </div>
@@ -343,7 +343,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['user_type'])) {
 
           <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="100">
 
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <form action="" role="form" class="php-email-form">
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Nama" required>
@@ -363,7 +363,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['user_type'])) {
                 <div class="error-message"></div>
                 <div class="sent-message">Pesan tetah diterima, Terima Kasih</div>
               </div>
-              <div class="text-center"><button type="submit">Kirim</button></div>
+              <div class="text-center" onclick="kirim()"><button type="submit">Kirim</button></div>
             </form>
 
           </div>
@@ -451,7 +451,12 @@ if (isset($_SESSION['email']) && isset($_SESSION['user_type'])) {
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    function kirim() {
+      alert("Pesan terkirim");
 
+    }
+  </script>
 </body>
 
 </html>

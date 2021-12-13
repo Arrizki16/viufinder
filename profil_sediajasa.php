@@ -60,7 +60,7 @@ if(is_null($sediajasaid)){
 
       <h1 class="logo"><a href="dashboard_carijasa.php">Viufinder</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar">
         <ul>
@@ -122,12 +122,25 @@ if(is_null($sediajasaid)){
               } else if ($user_type == 'pencari_jasa'){
                 echo '<a class="btn btn-primary" href="pemesanan.php?id='.$sediajasadata['pjasa_id'].'" role="button">Pesan Jasa</a>';
               } else if ($user_type == 'admin'){
-                echo '<a class="btn btn-primary" href="dashboard_admin.php?pid='.$sediajasaid.'&action=verifikasi" role="button">Verifikasi</a>';
-                echo '<a class="btn btn-danger" href="dashboard_admin.php?pid='.$sediajasaid.'&action=nonaktif" role="button">Nonaktifkan</a>';
+                $id = $sediajasadata['pjasa_id'];
+
+                $nonaktif = "SELECT * FROM nonaktif WHERE pjasa_id = '$id'";
+                $resNonaktif = mysqli_query($conn, $nonaktif);
+                $isNonaktif = ($resNonaktif->num_rows > 0) ? true : false;
+
+                $terverifikasi = "SELECT * FROM terverifikasi WHERE pjasa_id = '$id'";
+                $resTerverifikasi = mysqli_query($conn, $nonaktif);
+                $isTerverifikasi = ($resTerverifikasi->num_rows > 0) ? true : false;
+
+                if($isTerverifikasi) {
+                  echo '<a class="btn btn-danger" href="dashboard_admin.php?pid='.$sediajasaid.'&action=nonaktif" role="button">Nonaktifkan</a>';
+                } else {
+                  echo '<a class="btn btn-primary" href="dashboard_admin.php?pid='.$sediajasaid.'&action=verifikasi" role="button">Verifikasi</a>';
+                }
               }
             ?>
             
-          </div>
+          </div>          
         </div>
         <!-- End of profile section -->
       </div>

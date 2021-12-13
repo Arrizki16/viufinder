@@ -10,6 +10,36 @@ $query = "SELECT * FROM penyedia_jasa WHERE pjasa_email='$email'";
 $pjasadata = mysqli_fetch_assoc(mysqli_query($conn, $query));
 $id = $pjasadata['pjasa_id'];
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+	$name = $_POST['name'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];
+    $tel = $_POST['tel'];
+    $dob = $_POST['dob'];
+    $pob = $_POST['pob'];
+    $sex = $_POST['sex'];
+
+    $query = "UPDATE pencari_jasa
+                SET pcr_nama = ?,
+                pcr_email = ?,
+                pcr_alamat = ?,
+                pcr_kontak = ?,
+                pcr_tempatlahir = ?,
+                pcr_jkel = ?,
+                pcr_tanggallahir = ?
+                WHERE pcr_id = ?";
+
+    if($stmt = $conn->prepare($query)) { 
+		$stmt->bind_param('sssssssi', $name, $email, $address, $tel, $pob, $sex, $dob, $id);
+        $stmt->execute();
+        header('Location = profil_carijasa.php');
+	} else {
+		$error = $conn->errno . ' ' . $conn->error;
+		echo $error; // 1054 Unknown column 'foo' in 'field list'
+	}
+}
+
 if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'terima'){
     $pid = $_GET['pid'];
     $query = "UPDATE pemesanan_jasa SET pmsn_status = 'Dikonfirmasi' WHERE pmsn_id = '$pid'";
@@ -58,7 +88,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'kerja'){
 
       <h1 class="logo"><a href="index.php">Viufinder</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar">
         <ul>
@@ -128,52 +158,43 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'kerja'){
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="Home">
                             <form>
-                              <div class="form-group">
+                            <div class="form-group">
                                 <label for="inputName">Nama</label>
-                                <input type="text" class="form-control" id="inputName" placeholder="Name" value="">
+                                <input type="text" class="form-control profile" id="inputName" name="name" value="<?php echo $pjasadata['pjasa_nama']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Email</label>
-                                <input type="email" class="form-control" id="InputEmail" placeholder="Email" value="">
+                                <input type="email" class="form-control profile" id="InputEmail" name="email" value="<?php echo $pjasadata['pjasa_email']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">No. HP</label>
-                                <input type="email" class="form-control" id="InputNo" placeholder="No. HP" value="">
+                                <input type="text" class="form-control profile" id="InputNo" name="tel" pattern="[0-9]{11}" value="<?php echo $pjasadata['pjasa_kontak']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Alamat</label>
-                                <input type="email" class="form-control" id="InputAlamat" placeholder="Alamat" value="">
+                                <input type="text" class="form-control profile" id="InputAlamat" name="address" value="<?php echo $pjasadata['pjasa_alamat']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Jenis Kelamin</label>
-                                <input type="email" class="form-control" id="InputJenisKel" placeholder="Laki-laki / Perempuan" value="">
+                                <input type="text" class="form-control profile" id="InputJenisKel" name="sex" value="<?php echo $pjasadata['pjasa_jkel']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Tempat Lahir</label>
-                                <input type="email" class="form-control" id="InputTempatlahir" placeholder="Tempat lahir" value="">
+                                <input type="text" class="form-control profile" id="InputTempatlahir" name="pob" value="<?php echo $pjasadata['pjasa_tempatlahir']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Tanggal Lahir</label>
-                                <input type="email" class="form-control" id="InputTgllahir" placeholder="dd/mm/yy" value="">
+                                <input type="text" class="form-control profile" id="InputTgllahir" name="dob" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?php echo $pjasadata['pjasa_tanggallahir']?>" disabled readonly>
                               </div>
-                              <div class="form-group">
-                                <label for="exampleInputEmail1">Akun Instagram</label>
-                                <input type="email" class="form-control" id="InputIg" placeholder="Link akun instagram" value="">
-                              </div>
-                              <!-- For penyedia jasa use below-->
-                              <!-- <div class="form-group">
-                                <label for="exampleInputFile">File input</label>
-                                <input type="file" id="exampleInputFile">
-                                <p class="help-block">Example block-level help text here.</p>
-                              </div> -->
                               <div class="checkbox">
                                 <label>
                                   <input type="checkbox"> Check me out
                                 </label>
                               </div>
-                              <button type="submit" class="btn btn-default">Edit</button>
-                              <button type="submit" class="btn btn-primary">Save</button>
+                              
+                              <button type="submit" class="btn btn-primary profile" disabled>Save</button>
                             </form>
+                            <button id="editButton" class="btn btn-default" onclick="editProfile()">Edit</button>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="profile">Profile</div>
                         <div role="tabpanel" class="tab-pane" id="messages">Messages</div>
@@ -2565,5 +2586,19 @@ thead {
         }
     });
 </script>
+<script>
+    var editButton = document.getElementById("editButton");
+    
+    function editProfile() {
+        var inputs = document.querySelectorAll("input.profile");
+        for (var i = 0; i < inputs.length; i++) {
+            console.log(inputs[i].value);
+            inputs[i].disabled = false;
+            inputs[i].readOnly = false; 
+        }
+        document.querySelector("button.profile").disabled = false;
+        editButton.disabled=true;
+    }
+ </script>
 </body>
 </html>

@@ -35,7 +35,7 @@ session_start();
   
         <h1 class="logo"><a href="index.php">Viufinder</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
         <?php
           if(isset($_SESSION['email'])) {
         ?>
@@ -70,7 +70,7 @@ session_start();
       <form>
         <div class="inner-form">
           <div class="advance-search">
-            <span class="awal"><a href="index.html">Beranda</a> > <a href="carieditor.html">Cari Editor</a></span>
+            <span class="awal"><a href="index.php">Beranda</a> > <a href="carieditor.php">Cari Editor</a></span>
             <span class="desc">Cari Berdasarkan</span>
             <div class="row">
               <div class="col input-field">
@@ -154,20 +154,22 @@ session_start();
                 $ratingMax = (isset($_GET['maxrating'])) ? $_GET['maxrating'] : 5;
                 $location = (isset($_GET['lokasi'])) ? $_GET['lokasi'] : '';
                 $nonaktif = "SELECT pjasa_id FROM nonaktif";
+                $terverifikasi = "SELECT pjasa_id FROM terverifikasi";
                 
                 $editor = "SELECT p.pjasa_id, p.pjasa_nama, p.pjasa_alamat, p.pjasa_foto, f.*, k.* FROM penyedia_jasa AS p
                                 INNER JOIN penyedia_jasa_rangkap AS r ON p.pjasa_id = r.pjasa_id
                                 INNER JOIN editor as f ON r.edtr_id = f.edtr_id
                                 INNER JOIN editor_kategori fk ON fk.edtr_id = f.edtr_id
                                 INNER JOIN kategori_jasa k ON k.ktg_id = fk.ktg_id
-                                WHERE p.pjasa_id NOT IN ($nonaktif) n";
+                                WHERE p.pjasa_id NOT IN ($nonaktif)
+                                AND p.pjasa_id IN ($terverifikasi)";
                 $query = "SELECT DISTINCT(pjasa_id), pjasa_nama, pjasa_alamat, edtr_id, edtr_rating, edtr_tarif FROM ($editor) edtr
                           WHERE pjasa_nama LIKE '%$name%'
                           AND pjasa_alamat LIKE '%$location%'
                           AND edtr_rating > $ratingMin AND edtr_rating <= $ratingMax
                           AND ktg_kategori LIKE '%$category%'";
                 $result = mysqli_query($conn, $query);
-
+                // echo $query;
                 if ($result->num_rows > 0) {
                   while($row = $result->fetch_assoc()){
                     $nama = $row['pjasa_nama'];

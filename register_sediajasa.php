@@ -8,7 +8,7 @@ session_start();
 include_once("database/db_connection.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+	echo "masuk";
 	$name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -16,30 +16,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$isFtg = (isset($_POST['checkftg'])) ? 1 : 0;
 	$isEdtr = (isset($_POST['checkedtr'])) ? 1 : 0;
 	$isPalat = (isset($_POST['checkpalat'])) ? 1 : 0;
+	$ftgkat = ($isFtg && isset($_POST['ftgkat'])) ? $_POST['ftgkat'] : null;
+	$edtrkat = ($isEdtr && isset($_POST['edtrkat'])) ? $_POST['edtrkat'] : null;
+	$palatkat = ($isPalat && isset($_POST['palatkat'  	])) ? $_POST['palatkat'] : null;
 
-	$ftgq = ($isFtg) ? "INSERT INTO `fotografer` (`ftg_rating`) VALUES (`5`);" : "";
-	$edtrq = ($isEdtr) ? "INSERT INTO `editor` (`edtr_rating`) VALUES (`5`);" : "";
-	$palatq = ($isPalat) ? "INSERT INTO `penyewaan_alat` (`palat_rating`) VALUES (`5`);" : "";
+	$ftgq = ($isFtg) ? "INSERT INTO fotografer (ftg_rating) VALUES (5);" : "";
+	$edtrq = ($isEdtr) ? "INSERT INTO editor (edtr_rating) VALUES (5);" : "";
+	$palatq = ($isPalat) ? "INSERT INTO penyewaan_alat (palat_rating) VALUES (5);" : "";
 
-	$ftgid = ($isFtg) ? "(SELECT MAX(`ftg_id`) FROM `fotografer`)" : "null";
-	$edtrid = ($isEdtr) ? "(SELECT MAX(`edtr_id`) FROM `editor`)" : "null";
-	$palatid = ($isPalat) ? "(SELECT MAX(`palat_id`) FROM `penyewaan_alat`)" : "null";
+	$ftgid = ($isFtg) ? "(SELECT MAX(ftg_id) FROM fotografer)" : "null";
+	$edtrid = ($isEdtr) ? "(SELECT MAX(edtr_id) FROM editor)" : "null";
+	$palatid = ($isPalat) ? "(SELECT MAX(palat_id) FROM penyewaan_alat)" : "null";
 
-	$pjasaid = "(SELECT MAX(`pjasa_id`) FROM `penyedia_jasa`)";
+	$pjasaid = "(SELECT MAX(pjasa_id) FROM penyedia_jasa)";
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
-	echo $name;
 	// echo $email;	
-	$query = "INSERT INTO `penyedia_jasa` (`pjasa_nama`, `pjasa_email`, `pjasa_password`, `pjasa_alamat`) VALUES ('$name', '$email', '$password', '$address');
-				$ftgq $edtrq $palatq
-				INSERT INTO `penyedia_jasa_rangkap` (`pjasa_id`, `ftg_id`, `edtr_id`, `palat_id`) VALUES ($pjasaid, $ftgid, $edtrid, $palatid);";
-	
+	$query = "INSERT INTO penyedia_jasa (pjasa_nama, pjasa_email, pjasa_password, pjasa_alamat) VALUES ('$name', '$email', '$password', '$address');";
+	$query .= $ftgq;
+	$query .= $edtrq;
+	$query .= $palatq;
+	$query .= "INSERT INTO penyedia_jasa_rangkap (pjasa_id, ftg_id, edtr_id, palat_id) VALUES ($pjasaid, $ftgid, $edtrid, $palatid);";
+	// echo $query;
+	if ($isFtg && is_array($ftgkat)) {
+		for ($i=0;$i<count($ftgkat);$i++) {
+			echo $ftgkat[$i];
+			if($ftgkat[$i] != 0) {
+				$query .= "INSERT INTO fotografer_kategori (ftg_id, ktg_id) VALUES ($ftgid, $ftgkat[$i]);";
+				
+			}
+		}
+	}
+	if ($isEdtr && is_array($edtrkat)) {
+		for ($i=0;$i<count($edtrkat);$i++) {
+			if($edtrkat[$i] != 0) {
+				$query .= "INSERT INTO editor_kategori (edtr_id, ktg_id) VALUES ($edtrid, $edtrkat[$i]);";
+				
+			}
+		}
+	}
+	if ($isPalat && is_array($palatkat)) {
+		for ($i=0;$i<count($palatkat);$i++) {
+			if($palatkat[$i] != 0) {
+				$query .= "INSERT INTO penyewaan_alat_kategori (palat_id, ktg_id) VALUES ($palatid, $palatkat[$i]);";
+				
+			}
+		}
+	}
 	if($stmt = mysqli_multi_query($conn, $query)) { 
-		header('Location: login_sediajasa.php');
+		
+		// header('Location: login_sediajasa.php');
 	} else {
 		$error = $conn->errno . ' ' . $conn->error;
 		echo $error; // 1054 Unknown column 'foo' in 'field list'
 	}
+	
 }
 ?>
 
@@ -105,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					<div class="card fat">
 						<div class="card-body">
 							<h4 class="card-title text-center">REGISTER PENYEDIA JASA</h4>
-							<form method="POST" class="my-login-validation" novalidate="">
+							<form method="POST" class="my-login-validation" novalidate="" action="">
 								<div class="form-group">
 									<label for="name">Name</label>
 									<input id="name" type="text" class="form-control" placeholder="type your name" name="name" required autofocus>
@@ -136,26 +167,83 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 										Address is required
 									</div>
 								</div>
-
 								<label>Jenis Jasa</label>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" value="1" id="checkftg" name="checkftg" checked>
+									<input class="form-check-input" type="checkbox" value="1" id="checkftg" name="checkftg" onclick="updateInput()" checked>
 									<label class="form-check-label" for="checkftg">
 										Fotografer
 									</label>
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" value="1" id="checkedtr" name="checkedtr">
+									<input class="form-check-input" type="checkbox" value="1" id="checkedtr" onclick="updateInput()" name="checkedtr" >
 									<label class="form-check-label" for="checkedtr">
 										Editor
 									</label>
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" value="1" id="checkpalat" name="checkpalat">
+									<input class="form-check-input" type="checkbox" value="1" id="checkpalat" onclick="updateInput()" name="checkpalat" >
 									<label class="form-check-label" for="checkpalat">
 										Penyewaan Alat
 									</label>
 								</div>
+								<div id="kategoriftg" hidden>	
+									<label><br>Kategori Fotografi<br></label>
+									<?php
+									$query = "SELECT * FROM kategori_jasa";
+									$result = mysqli_query($conn, $query);
+									while($row = mysqli_fetch_assoc($result)){
+										echo '<div class="form-check">';
+										echo '<input class="form-check-input" type="checkbox" value="'.$row['ktg_id'].'" id="ftgkat'.$row['ktg_id'].'" name="ftgkat[]">';
+										echo '<label class="form-check-label" for="ftgkat'.$row['ktg_id'].'">';
+										echo $row['ktg_kategori'];
+										echo '</label>';
+										echo '</div>';
+									}
+									?>
+								</div>
+								<div id="kategoriedtr" hidden>	
+									<label><br>Kategori Editing<br></label>
+									<?php
+									$query = "SELECT * FROM kategori_jasa";
+									$result = mysqli_query($conn, $query);
+				
+									while($row = mysqli_fetch_assoc($result)){
+										echo '<div class="form-check">';
+										echo '<input class="form-check-input" type="checkbox" value="'.$row['ktg_id'].'" id="edtrkat'.$row['ktg_id'].'" name="edtrkat[]">';
+										echo '<label class="form-check-label" for="edtrkat'.$row['ktg_id'].'">';
+										echo $row['ktg_kategori'];
+										echo '</label>';
+										echo '</div>';
+										
+									}
+									?>
+								</div>
+								<div id="kategoripalat" hidden>	
+									<label><br>Kategori Alat<br></label>
+									<?php
+									$query = "SELECT * FROM kategori_jasa";
+									$result = mysqli_query($conn, $query);
+				
+									while($row = mysqli_fetch_assoc($result)){
+										echo '<div class="form-check">';
+										echo '<input class="form-check-input" type="checkbox" value="'.$row['ktg_id'].'" id="palatkat'.$row['ktg_id'].'" name="palatkat[]">';
+										echo '<label class="form-check-label" for="palatkat'.$row['ktg_id'].'">';
+										echo $row['ktg_kategori'];
+										echo '</label>';
+										echo '</div>';
+										
+									}
+									?>
+								</div>
+								<!-- <div>
+									<div class="form-group">
+										<label for="address">Address</label>
+										<input id="address" type="text" class="form-control" placeholder="type your address" name="addr" required data-eye>
+										<div class="invalid-feedback">
+											Address is required
+										</div>
+									</div>
+								</div> -->
 								<p><br></p>
 								<div class="form-group">
 									<div class="custom-checkbox custom-control">
@@ -186,5 +274,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<script src="assets/js/login.js"></script>
+	<script>
+    window.onload = updateInput();
+    function updateInput() {
+		console.log("update");
+        var isFtg = document.getElementById('checkftg').checked;
+		var isEdtr = document.getElementById('checkedtr').checked;
+		var isPalat = document.getElementById('checkpalat').checked;
+		console.log("isFtg: " + isFtg);
+		console.log("isEdtr: " + isEdtr);
+		console.log("isPalat: " + isPalat);
+
+
+		
+		document.getElementById('kategoriftg').hidden = (isFtg) ? false : true;
+		document.getElementById('kategoriedtr').hidden = (isEdtr) ? false : true;
+		document.getElementById('kategoripalat').hidden = (isPalat) ? false : true;
+	}	
+	</script>
 </body>
 </html>

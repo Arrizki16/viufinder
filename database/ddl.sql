@@ -226,3 +226,18 @@ CREATE TABLE `pemesanan_jasa` (
     FOREIGN KEY (`pcr_id`) REFERENCES `pencari_jasa`(`pcr_id`),
     FOREIGN KEY (`ulsn_id`) REFERENCES `ulasan`(`ulsn_id`)
 );
+
+INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('LinkAja', '08123456789');
+INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('BNI', '123-123-123');
+INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('GoPay', '08235551112');
+INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('BCA', '230-123-321');
+
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Prewedding'); #1
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Baby Shoot'); #2
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Wedding');    #3
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Portrait');   #4
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Family');     #5
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Maternity');  #6
+
+INSERT INTO admin_web (adm_nama, adm_email, adm_password) VALUES ('Admin 1', 'admin1@email.com', 'admin');
+INSERT INTO admin_web (adm_nama, adm_email, adm_password) VALUES ('Admin 2', 'admin2@email.com', 'admin');

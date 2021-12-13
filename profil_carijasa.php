@@ -1,10 +1,58 @@
 <?php
 session_start();
+if(!isset($_SESSION['email']) || (isset($_SESSION['user_type']) && $_SESSION['user_type'] != 'pencari_jasa')){
+  header("location:index.php");
+}
+include_once("database/db_connection.php");
+$email = $_SESSION['email'];
+ 
+$query = "SELECT * FROM pencari_jasa WHERE pcr_email='$email'";
+$pcrdata = mysqli_fetch_assoc(mysqli_query($conn, $query));
+$id = $pcrdata['pcr_id'];
 
-if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
-  if($_SESSION['user_type'] != 'pencari_jasa') {
-    header('Location: index.php');
-  }
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if (isset($_POST['submit']) && $_POST['submit'] == 'profile') {
+	    $name = $_POST['name'];
+        $email = $_POST['email'];
+        $address = $_POST['address'];
+        $tel = $_POST['tel'];
+        $dob = $_POST['dob'];
+        $pob = $_POST['pob'];
+        $sex = $_POST['sex'];
+
+        $query = "UPDATE pencari_jasa
+                    SET pcr_nama = ?,
+                    pcr_email = ?,
+                    pcr_alamat = ?,
+                    pcr_kontak = ?,
+                    pcr_tempatlahir = ?,
+                    pcr_jkel = ?,
+                    pcr_tanggallahir = ?
+                    WHERE pcr_id = ?";
+
+        if($stmt = $conn->prepare($query)) { 
+	    	$stmt->bind_param('sssssssi', $name, $email, $address, $tel, $pob, $sex, $dob, $id);
+            $stmt->execute();
+            header('Location = profil_carijasa.php');
+	    } else {
+	    	$error = $conn->errno . ' ' . $conn->error;
+	    	echo $error; // 1054 Unknown column 'foo' in 'field list'
+	    }
+    }
+
+    if (isset($_POST['submit']) && $_POST['submit'] == 'password') {
+        $old_password = $_POST['old_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+
+        $query = "UPDATE pcr_password SET pcr_password = ? WHERE pcr_id = ?";
+        if($stmt = $conn->prepare($query)) { 
+            $stmt->bind_param('si', $new_password, $id);
+            $stmt->execute();   // Execute the prepared query.
+            header('Location = profil_carijasa.php');
+        }
+    }    
 }
 ?>
 
@@ -33,7 +81,7 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
     
           <h1 class="logo"><a href="index.php">Viufinder</a></h1>
           <!-- Uncomment below if you prefer to use an image logo -->
-          <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+          <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
     
           <nav id="navbar" class="navbar">
             <ul>
@@ -65,19 +113,13 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
             <div class="profile-userpic">
                 <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-responsive" alt=""> </div>
             <div class="profile-usertitle">
-                <div class="profile-usertitle-name"> Marcus Doe </div>
-                <!-- for penyedia jasa use below -->
-                <!-- <div class="profile-usertitle-job"> Developer </div> -->
+                <div class="profile-usertitle-name"> <?php echo $pcrdata['pcr_nama']?> </div>
             </div>
             <div class="profile-usermenu">
                 <ul class="nav">
                     <li >
                         <a href="#profil">
                             <i class="icon-home"></i> Profil </a>
-                    </li>
-                    <li>
-                        <a href="#riwayatpemesanan">
-                            <i class="icon-settings"></i> Riwayat Pemesanan </a>
                     </li>
                     <li>
                         <a href="#ubahkatasandi">
@@ -102,49 +144,44 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="Home">
-                            <form>
+                            <form action="" method="post">
                               <div class="form-group">
                                 <label for="inputName">Nama</label>
-                                <input type="text" class="form-control" id="inputName" placeholder="Name" value="">
+                                <input type="text" class="form-control profile" id="inputName" name="name" value="<?php echo $pcrdata['pcr_nama']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Email</label>
-                                <input type="email" class="form-control" id="InputEmail" placeholder="Email" value="">
+                                <input type="email" class="form-control profile" id="InputEmail" name="email" value="<?php echo $pcrdata['pcr_email']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">No. HP</label>
-                                <input type="email" class="form-control" id="InputNo" placeholder="No. HP" value="">
+                                <input type="text" class="form-control profile" id="InputNo" name="tel" pattern="[0-9]{11}" value="<?php echo $pcrdata['pcr_kontak']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Alamat</label>
-                                <input type="email" class="form-control" id="InputAlamat" placeholder="Alamat" value="">
+                                <input type="text" class="form-control profile" id="InputAlamat" name="address" value="<?php echo $pcrdata['pcr_alamat']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Jenis Kelamin</label>
-                                <input type="email" class="form-control" id="InputJenisKel" placeholder="Laki-laki / Perempuan" value="">
+                                <input type="text" class="form-control profile" id="InputJenisKel" name="sex" value="<?php echo $pcrdata['pcr_jkel']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Tempat Lahir</label>
-                                <input type="email" class="form-control" id="InputTempatlahir" placeholder="Tempat lahir" value="">
+                                <input type="text" class="form-control profile" id="InputTempatlahir" name="pob" value="<?php echo $pcrdata['pcr_tempatlahir']?>" disabled readonly>
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Tanggal Lahir</label>
-                                <input type="email" class="form-control" id="InputTgllahir" placeholder="dd/mm/yy" value="">
+                                <input type="text" class="form-control profile" id="InputTgllahir" name="dob" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?php echo $pcrdata['pcr_tanggallahir']?>" disabled readonly>
                               </div>
-                              <!-- For penyedia jasa use below-->
-                              <!-- <div class="form-group">
-                                <label for="exampleInputFile">File input</label>
-                                <input type="file" id="exampleInputFile">
-                                <p class="help-block">Example block-level help text here.</p>
-                              </div> -->
                               <div class="checkbox">
                                 <label>
                                   <input type="checkbox"> Check me out
                                 </label>
                               </div>
-                              <button type="submit" class="btn btn-default">Edit</button>
-                              <button type="submit" class="btn btn-primary">Save</button>
+                              
+                              <button type="submit" class="btn btn-primary profile" value="profile" disabled>Save</button>
                             </form>
+                            <button id="editButton" class="btn btn-default" onclick="editProfile()">Edit</button>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="profile">Profile</div>
                         <div role="tabpanel" class="tab-pane" id="messages">Messages</div>
@@ -152,74 +189,6 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
                     </div>
                 
                 </div>
-            </div>
-        </div>
-
-        <!-- Tab Riwayat Pemesanan -->
-        <div class="portlet light bordered">
-            <div class="portlet-title tabbable-line">
-                <div class="caption caption-md" id="riwayatpemesanan">
-                    <i class="icon-globe theme-font hide"></i>
-                    <span class="caption-subject font-blue-madison bold uppercase">Riwayat Pemesanan</span>
-                </div>
-            </div>
-            <div class="portlet-body">
-                <div class="d-flex ">
-                    <div class="col-md-10">
-                        <div class="rounded">
-                            <div class="table-responsive table-borderless">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Penyedia Jasa</th>
-                                            <th>Pesanan</th>
-                                            <th>status</th>
-                                            <th>Total</th>
-                                            <th>Tgl Pesan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="table-body">
-                                        <tr class="cell-1">
-                                            <td>Ari Laksmana</td>
-                                            <td>Portrait Fotografi</td>
-                                            <td><span class="badge badge-success">Selesai</span></td>
-                                            <td>Rp.50.000</td>
-                                            <td>1 Juli 2021</td>
-                                        </tr>
-                                        <tr class="cell-1">
-                                            <td>Indah</td>
-                                            <td>Edit foto</td>
-                                            <td><span class="badge badge-info">Proses</span></td>
-                                            <td>Rp.25.000</td>
-                                            <td>2 Juli 2021</td>
-                                        </tr>
-                                        <tr class="cell-1">
-                                            <td>Bayu</td>
-                                            <td>Sewa Alat</td>
-                                            <td><span class="badge badge-danger">Batal</span></td>
-                                            <td>Rp.30.000</td>
-                                            <td>30 juni 2021</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- <div> -->
-                
-                    <!-- Tab panes -->
-                    <!-- <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="Home">
-                            <form>
-                              <div class="form-group">
-                                <label for="inputName">Name</label>
-                                <input type="text" class="form-control" id="inputName" placeholder="Name">
-                              </div>
-                            </form>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
 
@@ -241,7 +210,7 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
                               <div class="form-group">
                                 <label for="exampleInputPassword1">Password Lama</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control pwd" id="InputNewPassword" placeholder="Password lama" value="">
+                                    <input type="password" class="form-control pwd" id="InputOldPassword" placeholder="Password lama" name="old-password" value="">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default reveal" type="button"><i class="glyphicon glyphicon-eye-open"></i></button>
                                     </span>
@@ -250,7 +219,7 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
                               <div class="form-group">
                                 <label for="exampleInputPassword1">Password Baru</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control pwd1" id="InputNewPassword" placeholder="Password baru" value="">
+                                    <input type="password" class="form-control pwd1" id="InputNewPassword" placeholder="Password baru" name="new-password" value="">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default reveal1" type="button"><i class="glyphicon glyphicon-eye-open"></i></button>
                                     </span>
@@ -259,7 +228,7 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
                               <div class="form-group">
                                 <label for="exampleInputPassword1">Ketik ulang password baru</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control pwd1" id="RetypeNewPassword" placeholder="Password baru" value="">
+                                    <input type="password" class="form-control pwd1" id="RetypeNewPassword" placeholder="Password baru" name="confirm-password" value="">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default reveal1" type="button"><i class="glyphicon glyphicon-eye-open"></i></button>
                                     </span>
@@ -270,7 +239,7 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['user_type'])) {
                                   <input type="checkbox"> Check me out
                                 </label>
                               </div>
-                              <button type="submit" class="btn btn-primary">Change Password</button>
+                              <button type="submit" class="btn btn-primary" value="password" onclick="changePassword" >Change Password</button>
                             </form>
                         </div>
                     </div>
@@ -2355,5 +2324,19 @@ thead {
         }
     });
 </script>
+<script>
+    var editButton = document.getElementById("editButton");
+    
+    function editProfile() {
+        var inputs = document.querySelectorAll("input.profile");
+        for (var i = 0; i < inputs.length; i++) {
+            console.log(inputs[i].value);
+            inputs[i].disabled = false;
+            inputs[i].readOnly = false; 
+        }
+        document.querySelector("button.profile").disabled = false;
+        editButton.disabled=true;
+    }
+ </script>
 </body>
 </html>
