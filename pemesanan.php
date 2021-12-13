@@ -23,7 +23,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $payment = $_POST['metodebayar'];
     $type = $_POST['jenisjasa'];
     $harga = $_POST['harga'];
-
+    echo $harga;
     $query = "INSERT INTO pemesanan_jasa (pcr_id, pjasa_id, pmsn_tanggal, pmsn_waktu_mulai, pmsn_waktu_selesai, pmsn_lokasi, pmsn_catatan, mtd_id, pmsn_status, pmsn_jenis, pmsn_harga) 
                 VALUES ($pcrid, $pjasaid, '$date', '$timeStart', '$timeEnd', '$place', '$note', $payment, 'Dipesan', '$type', $harga)";
     $result = mysqli_query($conn, $query);
@@ -468,7 +468,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 <div class="form-group">
                     <label><br>Total Harga</label>
                     <div class="input-group">
-                        <input class="form-control form-control-lg" name="harga" type="text" value="00" disabled readonly>
+                        <input class="form-control form-control-lg" name="harga" type="text" value="00" readonly>
                     </div>
                 </div>
 

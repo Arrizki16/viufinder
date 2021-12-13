@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 	if($stmt = mysqli_multi_query($conn, $query)) { 
 		
-		// header('Location: login_sediajasa.php');
+		header('Location: login_sediajasa.php');
 	} else {
 		$error = $conn->errno . ' ' . $conn->error;
 		echo $error; // 1054 Unknown column 'foo' in 'field list'

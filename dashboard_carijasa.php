@@ -120,11 +120,16 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                                       INNER JOIN penyedia_jasa pj ON pj.pjasa_id = pm.pjasa_id
                                       WHERE pm.pcr_id = '$id' AND pm.pmsn_status = 'Dipesan'";
                           $result = mysqli_query($conn, $query);
+                          
                           if ($result->num_rows > 0) {
                               while($row = $result->fetch_assoc()) {
+                                $jenis = "";
+                                if ($row['pmsn_jenis'] == 1) $jenis = "Fotografi";
+                                else if ($row['pmsn_jenis'] == 2) $jenis = "Editing";
+                                else if ($row['pmsn_jenis'] == 3) $jenis = "Sewa alat";
                                   echo "<tr>
                                           <td>".$row['pjasa_nama']."</td>
-                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$jenis."</td>
                                           <td>".$row['pmsn_status']."</td>
                                           <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
                                           <td>
@@ -150,9 +155,13 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                                   $mtdid = $row['mtd_id'];
                                   $mtdq = mysqli_query($conn, "SELECT * FROM metode_bayar WHERE mtd_id = '$mtdid'");
                                   $mtddata = mysqli_fetch_assoc($mtdq);
+                                  $jenis = "";
+                                if ($row['pmsn_jenis'] == 1) $jenis = "Fotografi";
+                                else if ($row['pmsn_jenis'] == 2) $jenis = "Editing";
+                                else if ($row['pmsn_jenis'] == 3) $jenis = "Sewa alat";
                                   echo "<tr>
                                           <td>".$row['pjasa_nama']."</td>
-                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$jenis."</td>
                                           <td>".$row['pmsn_status']."</td>
                                           <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
                                           <td>
@@ -180,9 +189,13 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                           
                           if ($result->num_rows > 0) {
                               while($row = $result->fetch_assoc()) {
+                                $jenis = "";
+                                if ($row['pmsn_jenis'] == 1) $jenis = "Fotografi";
+                                else if ($row['pmsn_jenis'] == 2) $jenis = "Editing";
+                                else if ($row['pmsn_jenis'] == 3) $jenis = "Sewa alat";
                                   echo "<tr>
                                           <td>".$row['pjasa_nama']."</td>
-                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$jenis."</td>
                                           <td>".$row['pmsn_status']."</td>
                                           <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
                                           <td>
@@ -206,9 +219,13 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                           
                           if ($result->num_rows > 0) {
                               while($row = $result->fetch_assoc()) {
+                                $jenis = "";
+                                if ($row['pmsn_jenis'] == 1) $jenis = "Fotografi";
+                                else if ($row['pmsn_jenis'] == 2) $jenis = "Editing";
+                                else if ($row['pmsn_jenis'] == 3) $jenis = "Sewa alat";
                                   echo "<tr>
                                           <td>".$row['pjasa_nama']."</td>
-                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$jenis."</td>
                                           <td>".$row['pmsn_status']."</td>
                                           <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
                                           <td>
@@ -233,9 +250,13 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                           
                           if ($result->num_rows > 0) {
                               while($row = $result->fetch_assoc()) {
+                                $jenis = "";
+                                if ($row['pmsn_jenis'] == 1) $jenis = "Fotografi";
+                                else if ($row['pmsn_jenis'] == 2) $jenis = "Editing";
+                                else if ($row['pmsn_jenis'] == 3) $jenis = "Sewa alat";
                                   echo "<tr>
                                           <td>".$row['pjasa_nama']."</td>
-                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$jenis."</td>
                                           <td>".$row['pmsn_status']."</td>
                                           <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
                                           <td>
@@ -259,9 +280,13 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                           
                           if ($result->num_rows > 0) {
                               while($row = $result->fetch_assoc()) {
+                                $jenis = "";
+                                if ($row['pmsn_jenis'] == 1) $jenis = "Fotografi";
+                                else if ($row['pmsn_jenis'] == 2) $jenis = "Editing";
+                                else if ($row['pmsn_jenis'] == 3) $jenis = "Sewa alat";
                                   echo "<tr>
                                           <td>".$row['pjasa_nama']."</td>
-                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$jenis."</td>
                                           <td>".$row['pmsn_status']."</td>
                                           <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
                                           <td>
@@ -285,9 +310,13 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'bayar'){
                           
                           if ($result->num_rows > 0) {
                               while($row = $result->fetch_assoc()) {
+                                $jenis = "";
+                                if ($row['pmsn_jenis'] == 1) $jenis = "Fotografi";
+                                else if ($row['pmsn_jenis'] == 2) $jenis = "Editing";
+                                else if ($row['pmsn_jenis'] == 3) $jenis = "Sewa alat";
                                   echo "<tr>
                                           <td>".$row['pjasa_nama']."</td>
-                                          <td>".$row['pmsn_jenis']."</td>
+                                          <td>".$jenis."</td>
                                           <td>".$row['pmsn_status']."</td>
                                           <td>".$row['pmsn_tanggal']."<br>".$row['pmsn_waktu_mulai']." - ".$row['pmsn_waktu_selesai']."</td>
                                           <td>
