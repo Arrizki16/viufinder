@@ -1,3 +1,10 @@
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Prewedding'); #1
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Baby Shoot'); #2
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Wedding');    #3
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Portrait');   #4
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Family');     #5
+INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Maternity');  #6
+
 INSERT INTO penyedia_jasa (pjasa_nama, pjasa_email, pjasa_password, pjasa_alamat) 
     VALUES ('Adi', 'adi@email.com', '123', 'Kepanjen, Malang');
 INSERT INTO penyedia_jasa (pjasa_nama, pjasa_email, pjasa_password, pjasa_alamat) 
@@ -63,18 +70,15 @@ INSERT INTO penyedia_jasa_rangkap (pjasa_id, ftg_id, edtr_id, palat_id) VALUES (
 INSERT INTO penyedia_jasa_rangkap (pjasa_id, ftg_id, edtr_id, palat_id) VALUES (5, 4, 3, null);
 INSERT INTO penyedia_jasa_rangkap (pjasa_id, ftg_id, edtr_id, palat_id) VALUES (6, null, 4, 4);
 
-INSERT INTO pencari_jasa (pcr_nama, pcr_email, pcr_password) VALUES ('Daanii', 'danynabilgk@gmail.com', 'katasandi');
+INSERT INTO pencari_jasa (pcr_nama, pcr_email, pcr_password) VALUES ('Daanii', 'daanii@email.com', '123');
+INSERT INTO pencari_jasa (pcr_nama, pcr_email, pcr_password) VALUES ('Akmal', 'akmal@email.com', '123');
+INSERT INTO pencari_jasa (pcr_nama, pcr_email, pcr_password) VALUES ('Deka', 'deka@email.com', '123');
+INSERT INTO pencari_jasa (pcr_nama, pcr_email, pcr_password) VALUES ('Ridho', 'ridho@email.com', '123');
 
 INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('LinkAja', '08123456789');
 INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('BNI', '123-123-123');
 INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('GoPay', '08235551112');
 INSERT INTO metode_bayar (mtd_nama, mtd_nomertf) VALUES ('BCA', '230-123-321');
 
-INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Prewedding'); #1
-INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Baby Shoot'); #2
-INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Wedding');    #3
-INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Portrait');   #4
-INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Family');     #5
-INSERT INTO kategori_jasa (ktg_kategori) VALUES ('Maternity');  #6
-
 INSERT INTO admin_web (adm_nama, adm_email, adm_password) VALUES ('Admin 1', 'admin1@email.com', 'admin');
+INSERT INTO admin_web (adm_nama, adm_email, adm_password) VALUES ('Admin 2', 'admin2@email.com', 'admin');

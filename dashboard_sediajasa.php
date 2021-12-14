@@ -12,32 +12,32 @@ $id = $pjasadata['pjasa_id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-	$name = $_POST['name'];
-    $email = $_POST['email'];
-    $address = $_POST['address'];
-    $tel = $_POST['tel'];
-    $dob = $_POST['dob'];
-    $pob = $_POST['pob'];
-    $sex = $_POST['sex'];
+	if(true) {
+	    $name = (isset($_POST['name'])) ? $_POST['name'] : $pjasadata['pjasa_name'];
+        $email = (isset($_POST['email'])) ? $_POST['email'] : $pjasadata;
+        $address = (isset($_POST['address'])) ? "'".$_POST['address']."'" : "null";
+        $tel = (isset($_POST['tel'])) ? "'".$_POST['tel']."'" : "null";
+        $dob = (isset($_POST['dob'])) ? "'".$_POST['dob']."'" : "null";
+        $pob = (isset($_POST['pob'])) ? "'".$_POST['pob']."'" : "null";
+        $sex = (isset($_POST['sex'])) ? "'".$_POST['sex']."'" : "null";
 
-    $query = "UPDATE pencari_jasa
-                SET pcr_nama = ?,
-                pcr_email = ?,
-                pcr_alamat = ?,
-                pcr_kontak = ?,
-                pcr_tempatlahir = ?,
-                pcr_jkel = ?,
-                pcr_tanggallahir = ?
-                WHERE pcr_id = ?";
-
-    if($stmt = $conn->prepare($query)) { 
-		$stmt->bind_param('sssssssi', $name, $email, $address, $tel, $pob, $sex, $dob, $id);
-        $stmt->execute();
-        header('Location = profil_carijasa.php');
-	} else {
-		$error = $conn->errno . ' ' . $conn->error;
-		echo $error; // 1054 Unknown column 'foo' in 'field list'
-	}
+        $query = "UPDATE penyedia
+                    SET pjasa_nama = '$name',
+                    pjasa_email = '$email',
+                    pjasa_alamat = ".$address.",
+                    pjasa_kontak = ".$tel.",
+                    pjasa_tempatlahir = ".$pob.",
+                    pjasa_jkel = ".$sex.",
+                    pjasa_tanggallahir = ".$dob."
+                    WHERE pjasa_id = $id";
+        // echo $query;
+        if(mysqli_query($conn, $query)) { 
+            header('Location: profil_sediajasa.php');
+	    } else {
+	    	$error = $conn->errno . ' ' . $conn->error;
+	    	echo $error; // 1054 Unknown column 'foo' in 'field list'
+	    }
+    }
 }
 
 if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'terima'){

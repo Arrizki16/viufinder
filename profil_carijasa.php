@@ -12,47 +12,46 @@ $id = $pcrdata['pcr_id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if (isset($_POST['submit']) && $_POST['submit'] == 'profile') {
-	    $name = $_POST['name'];
-        $email = $_POST['email'];
-        $address = $_POST['address'];
-        $tel = $_POST['tel'];
-        $dob = $_POST['dob'];
-        $pob = $_POST['pob'];
-        $sex = $_POST['sex'];
+    // if (isset($_POST['submit']) && $_POST['submit'] == 'profile') {
+    if(true) {
+	    $name = (isset($_POST['name'])) ? $_POST['name'] : $pcrdata['pcr_name'];
+        $email = (isset($_POST['email'])) ? $_POST['email'] : $pcrdata;
+        $address = (isset($_POST['address'])) ? "'".$_POST['address']."'" : "null";
+        $tel = (isset($_POST['tel'])) ? "'".$_POST['tel']."'" : "null";
+        $dob = (isset($_POST['dob'])) ? "'".$_POST['dob']."'" : "null";
+        $pob = (isset($_POST['pob'])) ? "'".$_POST['pob']."'" : "null";
+        $sex = (isset($_POST['sex'])) ? "'".$_POST['sex']."'" : "null";
 
         $query = "UPDATE pencari_jasa
-                    SET pcr_nama = ?,
-                    pcr_email = ?,
-                    pcr_alamat = ?,
-                    pcr_kontak = ?,
-                    pcr_tempatlahir = ?,
-                    pcr_jkel = ?,
-                    pcr_tanggallahir = ?
-                    WHERE pcr_id = ?";
-
-        if($stmt = $conn->prepare($query)) { 
-	    	$stmt->bind_param('sssssssi', $name, $email, $address, $tel, $pob, $sex, $dob, $id);
-            $stmt->execute();
-            header('Location = profil_carijasa.php');
+                    SET pcr_nama = '$name',
+                    pcr_email = '$email',
+                    pcr_alamat = ".$address.",
+                    pcr_kontak = ".$tel.",
+                    pcr_tempatlahir = ".$pob.",
+                    pcr_jkel = ".$sex.",
+                    pcr_tanggallahir = ".$dob."
+                    WHERE pcr_id = $id";
+        // echo $query;
+        if(mysqli_query($conn, $query)) { 
+            header('Location: profil_carijasa.php');
 	    } else {
 	    	$error = $conn->errno . ' ' . $conn->error;
 	    	echo $error; // 1054 Unknown column 'foo' in 'field list'
 	    }
     }
 
-    if (isset($_POST['submit']) && $_POST['submit'] == 'password') {
-        $old_password = $_POST['old_password'];
-        $new_password = $_POST['new_password'];
-        $confirm_password = $_POST['confirm_password'];
+    // if (isset($_POST['submit']) && $_POST['submit'] == 'password') {
+    //     $old_password = $_POST['old_password'];
+    //     $new_password = $_POST['new_password'];
+    //     $confirm_password = $_POST['confirm_password'];
 
-        $query = "UPDATE pcr_password SET pcr_password = ? WHERE pcr_id = ?";
-        if($stmt = $conn->prepare($query)) { 
-            $stmt->bind_param('si', $new_password, $id);
-            $stmt->execute();   // Execute the prepared query.
-            header('Location = profil_carijasa.php');
-        }
-    }    
+    //     $query = "UPDATE pcr_password SET pcr_password = ? WHERE pcr_id = ?";
+    //     if($stmt = $conn->prepare($query)) { 
+    //         $stmt->bind_param('si', $new_password, $id);
+    //         $stmt->execute();   // Execute the prepared query.
+    //         // header('Location = profil_carijasa.php');
+    //     }
+    // }    
 }
 ?>
 
@@ -80,17 +79,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="container d-flex align-items-center ">
     
           <h1 class="logo"><a href="index.php">Viufinder</a></h1>
-          <!-- Uncomment below if you prefer to use an image logo -->
-          <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+          
     
           <nav id="navbar" class="navbar">
             <ul>
               <li><a class="nav-link scrollto" href="dashboard_carijasa.php">Dashboard</a></li>
               <li>
             <div class="dropdown">
-              <!-- <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown button
-              </button> -->
+              
               <a class="getstarted scrollto dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <?php echo $_SESSION['email']; ?>
               </a>
@@ -144,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="Home">
-                            <form action="" method="post">
+                            <form action="" method="POST">
                               <div class="form-group">
                                 <label for="inputName">Nama</label>
                                 <input type="text" class="form-control profile" id="inputName" name="name" value="<?php echo $pcrdata['pcr_nama']?>" disabled readonly>
@@ -172,11 +168,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                               <div class="form-group">
                                 <label for="exampleInputEmail1">Tanggal Lahir</label>
                                 <input type="text" class="form-control profile" id="InputTgllahir" name="dob" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?php echo $pcrdata['pcr_tanggallahir']?>" disabled readonly>
-                              </div>
-                              <div class="checkbox">
-                                <label>
-                                  <input type="checkbox"> Check me out
-                                </label>
                               </div>
                               
                               <button type="submit" class="btn btn-primary profile" value="profile" disabled>Save</button>
