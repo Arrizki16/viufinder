@@ -158,7 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="text" class="form-control profile" id="InputAlamat" name="address" value="<?php echo $pcrdata['pcr_alamat']?>" disabled readonly>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputEmail1">Jenis Kelamin</label>
+                                <label for="exampleInputEmail1">Jenis Kelamin (L/P)</label>
                                 <input type="text" class="form-control profile" id="InputJenisKel" name="sex" value="<?php echo $pcrdata['pcr_jkel']?>" disabled readonly>
                               </div>
                               <div class="form-group">
@@ -166,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="text" class="form-control profile" id="InputTempatlahir" name="pob" value="<?php echo $pcrdata['pcr_tempatlahir']?>" disabled readonly>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputEmail1">Tanggal Lahir</label>
+                                <label for="exampleInputEmail1">Tanggal Lahir (yyyy-mm-dd)</label>
                                 <input type="text" class="form-control profile" id="InputTgllahir" name="dob" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?php echo $pcrdata['pcr_tanggallahir']?>" disabled readonly>
                               </div>
                               
