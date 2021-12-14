@@ -175,7 +175,7 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'kerja'){
                                 <input type="text" class="form-control profile" id="InputAlamat" name="address" value="<?php echo $pjasadata['pjasa_alamat']?>" disabled readonly>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputEmail1">Jenis Kelamin</label>
+                                <label for="exampleInputEmail1">Jenis Kelamin (L/P)</label>
                                 <input type="text" class="form-control profile" id="InputJenisKel" name="sex" value="<?php echo $pjasadata['pjasa_jkel']?>" disabled readonly>
                               </div>
                               <div class="form-group">
@@ -183,8 +183,8 @@ if(isset($_GET['pid']) && isset($_GET['action']) && $_GET['action'] == 'kerja'){
                                 <input type="text" class="form-control profile" id="InputTempatlahir" name="pob" value="<?php echo $pjasadata['pjasa_tempatlahir']?>" disabled readonly>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputEmail1">Tanggal Lahir</label>
-                                <input type="text" class="form-control profile" id="InputTgllahir" name="dob" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?php echo $pjasadata['pjasa_tanggallahir']?>" disabled readonly>
+                                <label for="exampleInputEmail1">Tanggal Lahir (yyyy-mm-dd)</label>
+                                <input type="text" class="form-control profile" id="InputTgllahir" placeh name="dob" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?php echo $pjasadata['pjasa_tanggallahir']?>" disabled readonly>
                               </div>
                               <div class="checkbox">
                                 <label>
